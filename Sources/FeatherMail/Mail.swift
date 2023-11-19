@@ -51,7 +51,7 @@ public struct Mail {
 
     public init(
         from: Address,
-        to: [Address] = [],
+        to: [Address],
         cc: [Address] = [],
         bcc: [Address] = [],
         subject: String,
