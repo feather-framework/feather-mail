@@ -8,6 +8,7 @@ let package = Package(
     ],
     products: [
         .library(name: "FeatherMail", targets: ["FeatherMail"]),
+        .library(name: "XCTFeatherMail", targets: ["XCTFeatherMail"]),
     ],
     dependencies: [
         .package(url: "https://github.com/feather-framework/feather-service.git", .upToNextMinor(from: "0.1.0")),
@@ -19,10 +20,25 @@ let package = Package(
                 .product(name: "FeatherService", package: "feather-service")
             ]
         ),
+        .target(
+            name: "XCTFeatherMail",
+            dependencies: [
+                .target(name: "FeatherMail"),
+            ],
+            resources: [
+                .copy("Assets/feather.png")
+            ]
+        ),
         .testTarget(
             name: "FeatherMailTests",
             dependencies: [
                 .target(name: "FeatherMail"),
+            ]
+        ),
+        .testTarget(
+            name: "XCTFeatherMailTests",
+            dependencies: [
+                .target(name: "XCTFeatherMail"),
             ]
         ),
     ]
