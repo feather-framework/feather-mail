@@ -6,7 +6,7 @@
 //
 
 /// mail service error
-public enum MailerServiceError: Error {
+public enum MailServiceError: Error {
 
     case invalidRecipient
 

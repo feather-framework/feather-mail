@@ -7,9 +7,9 @@
 
 import Foundation
 
-public struct Mail {
+public struct Mail: Sendable {
 
-    public struct Address {
+    public struct Address: Sendable {
         public let email: String
         public let name: String?
 
@@ -22,7 +22,7 @@ public struct Mail {
         }
     }
 
-    public struct Attachment {
+    public struct Attachment: Sendable {
         public let name: String
         public let contentType: String
         public let data: Data
@@ -37,15 +37,19 @@ public struct Mail {
             self.data = data
         }
     }
+    
+    public enum Body: Sendable {
+        case plainText(String)
+        case html(String)
+    }
 
     public let from: Address
     public let to: [Address]
     public let cc: [Address]
     public let bcc: [Address]
-    public let subject: String
-    public let body: String
-    public let isHtml: Bool
     public let replyTo: [Address]
+    public let subject: String
+    public let body: Body
     public let reference: String?
     public let attachments: [Attachment]
 
@@ -54,15 +58,14 @@ public struct Mail {
         to: [Address],
         cc: [Address] = [],
         bcc: [Address] = [],
-        subject: String,
-        body: String,
-        isHtml: Bool = false,
         replyTo: [Address] = [],
+        subject: String,
+        body: Body,
         reference: String? = nil,
         attachments: [Attachment] = []
     ) throws {
         guard !to.isEmpty || !cc.isEmpty || !bcc.isEmpty else {
-            throw MailerServiceError.invalidRecipient
+            throw MailServiceError.invalidRecipient
         }
         self.from = from
         self.to = to
@@ -70,7 +73,6 @@ public struct Mail {
         self.bcc = bcc
         self.subject = subject
         self.body = body
-        self.isHtml = isHtml
         self.replyTo = replyTo
         self.reference = reference
         self.attachments = attachments

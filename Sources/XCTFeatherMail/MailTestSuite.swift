@@ -72,7 +72,7 @@ public extension MailTestSuite {
                 .init(to),
             ],
             subject: "Test plain text email",
-            body: "This is a plain text email."
+            body: .plainText("This is a plain text email.")
         )
         try await mail.send(email)
     }
@@ -87,8 +87,7 @@ public extension MailTestSuite {
                 .init(to),
             ],
             subject: "Test HTML email",
-            body: "This is a <b>HTML</b> email.",
-            isHtml: true
+            body: .html("This is a <b>HTML</b> email.")
         )
         try await mail.send(email)
     }
@@ -112,7 +111,7 @@ public extension MailTestSuite {
                 .init(to),
             ],
             subject: "Test email attachment",
-            body: "This is a test email with an attachment.",
+            body: .plainText("This is a test email with an attachment."),
             attachments: [
                 .init(
                     name: "feather.png",
