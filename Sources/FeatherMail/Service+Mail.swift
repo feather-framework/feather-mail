@@ -29,11 +29,11 @@ public enum MailServiceID: ServiceID {
 public extension ServiceRegistry {
 
     /// add a new mail service using a context
-    func add(
-        _ contextFactoryBuilder: @autoclosure @escaping () -> ServiceContext,
+    func addMail(
+        _ context: ServiceContext,
         id: MailServiceID = .default
     ) async throws {
-        try await add(.init { contextFactoryBuilder() }, id: id)
+        try await add(context, id: id)
     }
 
     /// returns a mail service by a given id

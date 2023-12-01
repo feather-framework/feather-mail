@@ -15,7 +15,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/feather-framework/feather-service",
-            .upToNextMinor(from: "0.2.0")
+            .upToNextMinor(from: "0.3.0")
         ),
     ],
     targets: [

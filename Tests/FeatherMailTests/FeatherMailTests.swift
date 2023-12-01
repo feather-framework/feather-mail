@@ -6,9 +6,32 @@
 //
 
 import XCTest
+import FeatherService
 import FeatherMail
 
 final class FeatherMailTests: XCTestCase {
 
-    func testExample() async throws {}
+    func testExample() async throws {
+        let registry = ServiceRegistry()
+        
+        try await registry.addMail(MyMailServiceContext())
+        try await registry.run()
+
+        let mail = try await registry.mail()
+        XCTAssertNotNil(mail)
+
+        let email = try Mail(
+            from: .init("from@from.from"),
+            to: [
+                .init("to@to.to"),
+            ],
+            subject: "Test plain text email",
+            body: .plainText("This is a plain text email.")
+        )
+        
+        try await mail.send(email)
+        
+        try await registry.shutdown()
+        
+    }
 }
