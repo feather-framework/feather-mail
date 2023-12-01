@@ -11,7 +11,7 @@ import FeatherMail
 
 final class FeatherMailTests: XCTestCase {
 
-    func testExample() async throws {
+    func testSendMail() async throws {
         let registry = ServiceRegistry()
         
         try await registry.addMail(MyMailServiceContext())
