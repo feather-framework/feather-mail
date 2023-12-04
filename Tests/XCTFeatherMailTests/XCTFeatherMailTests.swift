@@ -41,13 +41,13 @@ final class XCTFeatherMailTests: XCTestCase {
         
         do {
             try await mailTestSuite.testAll(from: "from@from.from", to: "to@to.to")
-            XCTAssert(false, "no exception")
+            XCTFail("Test is expected to fail.")
         }
         catch let error as MailTestSuiteError {
             XCTAssertTrue(error.error as? XCTMailServiceError != nil)
         }
         catch {
-            XCTAssert(false, "wrong exception")
+            XCTFail("Test is expected to fail.")
         }
         
         try await registry.shutdown()
