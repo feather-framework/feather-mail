@@ -7,7 +7,7 @@
 
 import FeatherService
 
-public struct MyMailServiceContext: ServiceContext {
+struct MyMailServiceContext: ServiceContext {
 
     public func make() throws -> ServiceBuilder {
         MyMailServiceBuilder()

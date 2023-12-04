@@ -10,7 +10,7 @@ import FeatherService
 struct MyMailServiceBuilder: ServiceBuilder {
 
     func build(using config: ServiceConfig) throws -> Service {
-        MyMailService(config: config, availableSpace: 0)
+        MyMailService(config: config)
     }
 
 }

@@ -7,10 +7,10 @@
 
 import FeatherService
 
-struct XCTMyMailServiceBuilder: ServiceBuilder {
+struct TestMailServiceBuilder: ServiceBuilder {
 
     func build(using config: ServiceConfig) throws -> Service {
-        XCTMyMailService(config: config, availableSpace: 0)
+        TestMailService(config: config)
     }
 
 }

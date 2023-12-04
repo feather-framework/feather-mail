@@ -15,7 +15,7 @@ final class XCTFeatherMailTests: XCTestCase {
     func testNormal() async throws {
         let registry = ServiceRegistry()
         
-        try await registry.addMail(XCTMyMailServiceContext(isTestError: false))
+        try await registry.addMail(TestMailServiceContext(throwTestError: false))
         try await registry.run()
 
         let mail = try await registry.mail()
@@ -31,7 +31,7 @@ final class XCTFeatherMailTests: XCTestCase {
     func testError() async throws {
         let registry = ServiceRegistry()
         
-        try await registry.addMail(XCTMyMailServiceContext(isTestError: true))
+        try await registry.addMail(TestMailServiceContext(throwTestError: true))
         try await registry.run()
 
         let mail = try await registry.mail()
@@ -44,7 +44,7 @@ final class XCTFeatherMailTests: XCTestCase {
             XCTFail("Test is expected to fail.")
         }
         catch let error as MailTestSuiteError {
-            XCTAssertTrue(error.error as? XCTMailServiceError != nil)
+            XCTAssertTrue(error.error as? TestMailServiceError != nil)
         }
         catch {
             XCTFail("Test is expected to fail.")

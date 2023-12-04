@@ -11,7 +11,6 @@ import FeatherMail
 struct MyMailService: MailService {
 
     var config: ServiceConfig
-    var availableSpace: UInt64
 
     /// send an email
     func send(_ email: Mail) async throws {

@@ -7,15 +7,15 @@
 
 import FeatherService
 
-public struct XCTMyMailServiceContext: ServiceContext {
+struct TestMailServiceContext: ServiceContext {
 
-    let isTestError: Bool
+    let throwTestError: Bool
     
-    init(isTestError: Bool) {
-        self.isTestError = isTestError
+    init(throwTestError: Bool) {
+        self.throwTestError = throwTestError
     }
     
     public func make() throws -> ServiceBuilder {
-        XCTMyMailServiceBuilder()
+        TestMailServiceBuilder()
     }
 }
