@@ -1,12 +1,12 @@
 //
-//  MailServiceError.swift
+//  MailComponentError.swift
 //  FeatherMail
 //
 //  Created by Tibor Bodecs on 2023. 01. 16..
 //
 
-/// mail service error
-public enum MailServiceError: Error {
+/// mail component error
+public enum MailComponentError: Error {
 
     case invalidRecipient
 

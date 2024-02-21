@@ -6,15 +6,15 @@
 //
 
 import XCTest
-import FeatherService
+import FeatherComponent
 import FeatherMail
 
 final class FeatherMailTests: XCTestCase {
 
     func testSendMail() async throws {
-        let registry = ServiceRegistry()
+        let registry = ComponentRegistry()
         
-        try await registry.addMail(MyMailServiceContext())
+        try await registry.addMail(MyMailComponentContext())
         try await registry.run()
 
         let mail = try await registry.mail()

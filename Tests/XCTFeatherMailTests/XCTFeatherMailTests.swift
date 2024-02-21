@@ -6,16 +6,16 @@
 //
 
 import XCTest
-import FeatherService
+import FeatherComponent
 import FeatherMail
 import XCTFeatherMail
 
 final class XCTFeatherMailTests: XCTestCase {
 
     func testNormal() async throws {
-        let registry = ServiceRegistry()
+        let registry = ComponentRegistry()
         
-        try await registry.addMail(TestMailServiceContext(throwTestError: false))
+        try await registry.addMail(TestMailComponentContext(throwTestError: false))
         try await registry.run()
 
         let mail = try await registry.mail()
@@ -29,9 +29,9 @@ final class XCTFeatherMailTests: XCTestCase {
     }
     
     func testError() async throws {
-        let registry = ServiceRegistry()
+        let registry = ComponentRegistry()
         
-        try await registry.addMail(TestMailServiceContext(throwTestError: true))
+        try await registry.addMail(TestMailComponentContext(throwTestError: true))
         try await registry.run()
 
         let mail = try await registry.mail()
@@ -44,7 +44,7 @@ final class XCTFeatherMailTests: XCTestCase {
             XCTFail("Test is expected to fail.")
         }
         catch let error as MailTestSuiteError {
-            XCTAssertTrue(error.error as? TestMailServiceError != nil)
+            XCTAssertTrue(error.error as? TestMailComponentError != nil)
         }
         catch {
             XCTFail("Test is expected to fail.")

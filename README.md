@@ -1,6 +1,6 @@
 # Feather Mail
 
-An abstract mail service for Feather CMS.
+An abstract mail component for Feather CMS.
 
 ## Getting started
 
@@ -13,7 +13,7 @@ Use at your own risk.
 To add a dependency on the package, declare it in your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/feather-framework/feather-mail", .upToNextMinor(from: "0.3.0")),
+.package(url: "https://github.com/feather-framework/feather-mail", .upToNextMinor(from: "0.4.0")),
 ```
 
 and to your application target, add `FeatherMail` to your dependencies:
@@ -31,7 +31,7 @@ import PackageDescription
 let package = Package(
     name: "my-application",
     dependencies: [
-        .package(url: "https://github.com/feather-framework/feather-mail", .upToNextMinor(from: "0.3.0")),
+        .package(url: "https://github.com/feather-framework/feather-mail", .upToNextMinor(from: "0.4.0")),
     ],
     targets: [
         .target(name: "MyApplication", dependencies: [

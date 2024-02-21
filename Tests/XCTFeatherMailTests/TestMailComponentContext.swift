@@ -1,13 +1,13 @@
 //
-//  MyMailServiceContext.swift
+//  MyMailComponentContext.swift
 //  FeatherMailTests
 //
 //  Created by mzperx on 30/11/2023.
 //
 
-import FeatherService
+import FeatherComponent
 
-struct TestMailServiceContext: ServiceContext {
+struct TestMailComponentContext: ComponentContext {
 
     let throwTestError: Bool
     
@@ -15,7 +15,7 @@ struct TestMailServiceContext: ServiceContext {
         self.throwTestError = throwTestError
     }
     
-    public func make() throws -> ServiceBuilder {
-        TestMailServiceBuilder()
+    public func make() throws -> ComponentBuilder {
+        TestMailComponentBuilder()
     }
 }

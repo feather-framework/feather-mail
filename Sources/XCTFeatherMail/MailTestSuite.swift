@@ -27,9 +27,9 @@ public struct MailTestSuiteError: Error {
 
 public struct MailTestSuite {
 
-    let mail: MailService
+    let mail: MailComponent
 
-    public init(_ mail: MailService) {
+    public init(_ mail: MailComponent) {
         self.mail = mail
     }
 
