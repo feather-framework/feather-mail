@@ -65,7 +65,7 @@ public struct Mail: Sendable {
         attachments: [Attachment] = []
     ) throws {
         guard !to.isEmpty || !cc.isEmpty || !bcc.isEmpty else {
-            throw MailServiceError.invalidRecipient
+            throw MailComponentError.invalidRecipient
         }
         self.from = from
         self.to = to

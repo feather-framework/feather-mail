@@ -15,15 +15,13 @@ let package = Package(
         .library(name: "XCTFeatherMail", targets: ["XCTFeatherMail"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/feather-framework/feather-service",
-            .upToNextMinor(from: "0.3.0")
-        ),
+        .package(url: "https://github.com/feather-framework/feather-component", .upToNextMinor(from: "0.4.0")),
     ],
     targets: [
         .target(
             name: "FeatherMail",
             dependencies: [
-                .product(name: "FeatherService", package: "feather-service")
+                .product(name: "FeatherComponent", package: "feather-component")
             ]
         ),
         .target(
