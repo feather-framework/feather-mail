@@ -15,7 +15,7 @@ let package = Package(
         .library(name: "XCTFeatherMail", targets: ["XCTFeatherMail"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/feather-framework/feather-component", .upToNextMinor(from: "0.4.0")),
+        .package(url: "https://github.com/feather-framework/feather-component", .upToNextMinor(from: "0.5.0")),
     ],
     targets: [
         .target(

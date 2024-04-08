@@ -14,6 +14,6 @@ struct MyMailComponent: MailComponent {
 
     /// send an email
     func send(_ email: Mail) async throws {
-        
+
     }
 }

@@ -69,7 +69,7 @@ public extension MailTestSuite {
         let email = try Mail(
             from: .init(from),
             to: [
-                .init(to),
+                .init(to)
             ],
             subject: "Test plain text email",
             body: .plainText("This is a plain text email.")
@@ -84,7 +84,7 @@ public extension MailTestSuite {
         let email = try Mail(
             from: .init(from),
             to: [
-                .init(to),
+                .init(to)
             ],
             subject: "Test HTML email",
             body: .html("This is a <b>HTML</b> email.")
@@ -96,8 +96,8 @@ public extension MailTestSuite {
         from: String,
         to: String
     ) async throws {
-        
-        guard 
+
+        guard
             let url = getAttachmentUrl(),
             let data = try? Data(contentsOf: url)
         else {
@@ -108,7 +108,7 @@ public extension MailTestSuite {
         let email = try Mail(
             from: .init(from),
             to: [
-                .init(to),
+                .init(to)
             ],
             subject: "Test email attachment",
             body: .plainText("This is a test email with an attachment."),

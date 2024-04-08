@@ -37,7 +37,7 @@ public struct Mail: Sendable {
             self.data = data
         }
     }
-    
+
     public enum Body: Sendable {
         case plainText(String)
         case html(String)
