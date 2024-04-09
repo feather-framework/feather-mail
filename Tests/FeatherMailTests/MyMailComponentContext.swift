@@ -9,7 +9,7 @@ import FeatherComponent
 
 struct MyMailComponentContext: ComponentContext {
 
-    public func make() throws -> ComponentBuilder {
-        MyMailComponentBuilder()
+    func make() throws -> ComponentFactory {
+        MyMailComponentFactory()
     }
 }
