@@ -16,6 +16,7 @@ public enum MailComponentID: ComponentID {
     /// custom mail component identifier
     case custom(String)
 
+    /// raw identifier
     public var rawId: String {
         switch self {
         case .default:

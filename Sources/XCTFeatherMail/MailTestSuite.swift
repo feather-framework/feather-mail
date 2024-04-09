@@ -8,10 +8,14 @@
 import Foundation
 import FeatherMail
 
+/// mail test suit error
 public struct MailTestSuiteError: Error {
 
+    /// function
     public let function: String
+    /// line
     public let line: Int
+    /// error
     public let error: Error?
 
     init(
@@ -25,14 +29,17 @@ public struct MailTestSuiteError: Error {
     }
 }
 
+/// mail test suite
 public struct MailTestSuite {
 
     let mail: MailComponent
 
+    /// mail test suite init
     public init(_ mail: MailComponent) {
         self.mail = mail
     }
 
+    /// test all mail sending
     public func testAll(
         from: String,
         to: String

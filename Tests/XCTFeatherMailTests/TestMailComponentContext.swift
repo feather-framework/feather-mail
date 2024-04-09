@@ -11,11 +11,7 @@ struct TestMailComponentContext: ComponentContext {
 
     let throwTestError: Bool
 
-    init(throwTestError: Bool) {
-        self.throwTestError = throwTestError
-    }
-
-    public func make() throws -> ComponentFactory {
+    func make() throws -> ComponentFactory {
         TestMailComponentFactory()
     }
 }
