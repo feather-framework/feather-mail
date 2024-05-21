@@ -22,7 +22,11 @@ format:
 doc:
 	swift package --allow-writing-to-directory ./docs \
     generate-documentation --target FeatherMail \
+	--include-extended-types \
     --disable-indexing \
     --transform-for-static-hosting \
 	--hosting-base-path feather-mail \
 	--output-path ./docs
+	
+preview:
+	swift package --disable-sandbox preview-documentation --target FeatherMail
