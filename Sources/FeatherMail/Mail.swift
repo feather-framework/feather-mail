@@ -7,17 +7,20 @@
 
 import Foundation
 
-/// mail object
+/// A structure representing an email message.
 public struct Mail: Sendable {
 
-    /// address
+    /// A structure representing an email address.
     public struct Address: Sendable {
-        /// email
+        /// The email address.
         public let email: String
-        /// name
+        /// The name associated with the email address (optional).
         public let name: String?
 
-        /// mail object init
+        /// Initializes an Address with an email and an optional name.
+        /// - Parameters:
+        ///   - email: The email address.
+        ///   - name: The name associated with the email address. Default is nil.
         public init(
             _ email: String,
             name: String? = nil
@@ -27,16 +30,20 @@ public struct Mail: Sendable {
         }
     }
 
-    /// attachment
+    /// A structure representing an email attachment.
     public struct Attachment: Sendable {
-        /// name
+        /// The name of the attachment.
         public let name: String
-        /// content type
+        /// The content type of the attachment.
         public let contentType: String
-        /// data
+        /// The data of the attachment.
         public let data: Data
 
-        /// attachment init
+        /// Initializes an Attachment with a name, content type, and data.
+        /// - Parameters:
+        ///   - name: The name of the attachment.
+        ///   - contentType: The content type of the attachment.
+        ///   - data: The data of the attachment.
         public init(
             name: String,
             contentType: String,
@@ -48,31 +55,45 @@ public struct Mail: Sendable {
         }
     }
 
+    /// An enumeration representing the body of an email.
     public enum Body: Sendable {
+        /// Plain text body.
         case plainText(String)
+        /// HTML formatted body.
         case html(String)
     }
 
-    /// from
+    /// The sender's address.
     public let from: Address
-    /// to
+    /// The primary recipient addresses.
     public let to: [Address]
-    /// cc
+    /// The carbon copy recipient addresses.
     public let cc: [Address]
-    /// bcc
+    /// The blind carbon copy recipient addresses.
     public let bcc: [Address]
-    /// reply to
+    /// The reply-to addresses.
     public let replyTo: [Address]
-    /// subject
+    /// The subject of the email.
     public let subject: String
-    ///body
+    /// The body of the email.
     public let body: Body
-    /// reference
+    /// The reference identifier (optional).
     public let reference: String?
-    /// attachments
+    /// The email attachments.
     public let attachments: [Attachment]
 
-    /// mail attachment init
+    /// Initializes a Mail instance with the specified parameters.
+    /// - Parameters:
+    ///   - from: The sender's address.
+    ///   - to: The primary recipient addresses.
+    ///   - cc: The carbon copy recipient addresses. Default is an empty array.
+    ///   - bcc: The blind carbon copy recipient addresses. Default is an empty array.
+    ///   - replyTo: The reply-to addresses. Default is an empty array.
+    ///   - subject: The subject of the email.
+    ///   - body: The body of the email.
+    ///   - reference: The reference identifier. Default is nil.
+    ///   - attachments: The email attachments. Default is an empty array.
+    /// - Throws: `MailComponentError.invalidRecipient` if there are no valid recipients in `to`, `cc`, or `bcc`.
     public init(
         from: Address,
         to: [Address],
@@ -97,5 +118,4 @@ public struct Mail: Sendable {
         self.reference = reference
         self.attachments = attachments
     }
-
 }

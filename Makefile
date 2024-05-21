@@ -18,3 +18,11 @@ check:
 
 format:
 	./scripts/run-swift-format.sh --fix
+
+doc:
+	swift package --allow-writing-to-directory ./docs \
+    generate-documentation --target FeatherMail \
+    --disable-indexing \
+    --transform-for-static-hosting \
+	--hosting-base-path feather-mail \
+	--output-path ./docs

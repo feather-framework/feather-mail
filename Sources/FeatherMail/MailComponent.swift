@@ -7,9 +7,10 @@
 
 import FeatherComponent
 
-/// the mail component protocol
+/// A protocol defining the requirements for a mail component.
 public protocol MailComponent: Component {
 
-    /// send an email
+    /// Sends an email.
+    /// - Parameter email: The email to send.
     func send(_ email: Mail) async throws
 }

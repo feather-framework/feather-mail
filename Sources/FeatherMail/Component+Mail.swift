@@ -8,15 +8,14 @@
 import FeatherComponent
 import Logging
 
+/// An enumeration representing IDs for mail components.
 public enum MailComponentID: ComponentID {
-
-    /// default mail component identifier
+    /// Default mail component ID.
     case `default`
-
-    /// custom mail component identifier
+    /// Custom mail component ID with a specified string identifier.
     case custom(String)
 
-    /// raw identifier
+    /// The raw identifier for the component.
     public var rawId: String {
         switch self {
         case .default:
@@ -28,8 +27,11 @@ public enum MailComponentID: ComponentID {
 }
 
 public extension ComponentRegistry {
-
-    /// add a new mail component using a context
+    /// Adds a mail component to the registry.
+    /// - Parameters:
+    ///   - context: The component context.
+    ///   - id: The ID for the mail component. Default is `.default`.
+    /// - Throws: An error if the mail component cannot be added.
     func addMail(
         _ context: ComponentContext,
         id: MailComponentID = .default
@@ -37,7 +39,12 @@ public extension ComponentRegistry {
         try await add(context, id: id)
     }
 
-    /// returns a mail component by a given id
+    /// Retrieves a mail component from the registry.
+    /// - Parameters:
+    ///   - id: The ID for the mail component. Default is `.default`.
+    ///   - logger: An optional logger for logging messages. Default is nil.
+    /// - Returns: The mail component.
+    /// - Throws: An error if the mail component cannot be retrieved.
     func mail(
         _ id: MailComponentID = .default,
         logger: Logger? = nil
