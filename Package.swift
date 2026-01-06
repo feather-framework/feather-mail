@@ -1,4 +1,4 @@
-// swift-tools-version:5.9
+// swift-tools-version:6.2
 import PackageDescription
 
 let package = Package(
@@ -15,13 +15,14 @@ let package = Package(
         .library(name: "XCTFeatherMail", targets: ["XCTFeatherMail"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/feather-framework/feather-component", .upToNextMinor(from: "0.5.0")),
+        .package(url: "https://github.com/swiftlang/swift-docc-plugin", from: "1.4.2"),
+        .package(url: "https://github.com/apple/swift-log", from: "1.8.0"),
     ],
     targets: [
         .target(
             name: "FeatherMail",
             dependencies: [
-                .product(name: "FeatherComponent", package: "feather-component")
+                .product(name: "Logging", package: "swift-log"),
             ]
         ),
         .target(
@@ -31,12 +32,6 @@ let package = Package(
             ],
             resources: [
                 .copy("Assets/feather.png")
-            ]
-        ),
-        .testTarget(
-            name: "FeatherMailTests",
-            dependencies: [
-                .target(name: "FeatherMail"),
             ]
         ),
         .testTarget(

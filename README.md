@@ -4,7 +4,7 @@ An abstract mail component for Feather CMS.
 
 ## Getting started
 
-⚠️ This repository is a work in progress, things can break until it reaches v1.0.0. 
+⚠️ This repository is a work in progress, things can break until it reaches v1.0.0.
 
 Use at your own risk.
 
@@ -25,7 +25,7 @@ and to your application target, add `FeatherMail` to your dependencies:
 Example `Package.swift` file with `FeatherMail` as a dependency:
 
 ```swift
-// swift-tools-version:5.9
+// swift-tools-version:6.2
 import PackageDescription
 
 let package = Package(
@@ -44,3 +44,7 @@ let package = Package(
 )
 ```
 
+### Documentation
+
+The official API reference for this project is available at:
+[https://feather-framework.github.io/feather-mail/documentation/](https://feather-framework.github.io/feather-mail/documentation/)
