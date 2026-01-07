@@ -16,7 +16,7 @@ jobs:
       broken_symlink_check_enabled : true
       unacceptable_language_check_enabled : true
       docs_check_enabled : true
-      api_breakage_check_enabled : false
+      api_breakage_check_enabled : true
       license_header_check_enabled : false
       shell_check_enabled : false
       yamllint_check_enabled : false
