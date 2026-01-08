@@ -1,13 +1,8 @@
 //
 //  MailStruct.swift
-//  Feather-mail
+//  feather-mail
 //
 //  Created by Binary Birds on 2026. 01. 06..
-
-//
-//  MailStruct.swift
-//
-//  Created by gerp83 on 2026. 01. 06.
 //
 
 import FeatherMail

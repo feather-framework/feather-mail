@@ -1,11 +1,15 @@
 //
 //  Mail.swift
-//  Feather-mail
+//  feather-mail
 //
 //  Created by Tibor Bodecs on 2023. 01. 16..
 //
 
-import Foundation
+#if canImport(FoundationEssentials)
+public import FoundationEssentials
+#else
+public import Foundation
+#endif
 
 /// A thread-safe representation of an email message.
 public struct Mail: Sendable {

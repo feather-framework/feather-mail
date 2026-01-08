@@ -1,11 +1,15 @@
 //
 //  MailTestSuite.swift
-//  Feather-mail
+//  feather-mail
 //
 //  Created by Tibor Bodecs on 2024. 04. 09..
 //
 
-import Foundation
+#if canImport(FoundationEssentials)
+public import FoundationEssentials
+#else
+public import Foundation
+#endif
 import FeatherMail
 
 /// An error type used to wrap and report failures within the `MailTestSuite`.

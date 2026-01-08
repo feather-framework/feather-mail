@@ -1,6 +1,6 @@
 //
 //  MailError.swift
-//  Feather-mail
+//  feather-mail
 //
 //  Created by Tibor Bodecs on 2023. 01. 16..
 //

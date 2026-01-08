@@ -12,7 +12,7 @@ let package = Package(
     ],
     products: [
         .library(name: "FeatherMail", targets: ["FeatherMail"]),
-        .library(name: "XCTFeatherMail", targets: ["XCTFeatherMail"]),
+        .library(name: "FeatherMailTesting", targets: ["FeatherMailTesting"]),
     ],
     dependencies: [
         .package(url: "https://github.com/swiftlang/swift-docc-plugin", from: "1.4.2"),
@@ -26,7 +26,7 @@ let package = Package(
             ]
         ),
         .target(
-            name: "XCTFeatherMail",
+            name: "FeatherMailTesting",
             dependencies: [
                 .target(name: "FeatherMail"),
             ],
@@ -35,9 +35,9 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "XCTFeatherMailTests",
+            name: "FeatherMailTests",
             dependencies: [
-                .target(name: "XCTFeatherMail"),
+                .target(name: "FeatherMailTesting"),
             ]
         ),
     ]
