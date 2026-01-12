@@ -18,20 +18,20 @@ let package = Package(
     ],
 
     dependencies: [
-        .package(url: "https://github.com/apple/swift-log", from: "1.8.0"),
+        .package(url: "https://github.com/apple/swift-log", from: "1.8.0")
     ],
 
     targets: [
         .target(
             name: "FeatherMail",
             dependencies: [
-                .product(name: "Logging", package: "swift-log"),
+                .product(name: "Logging", package: "swift-log")
             ]
         ),
         .target(
             name: "FeatherMailTesting",
             dependencies: [
-                .target(name: "FeatherMail"),
+                .target(name: "FeatherMail")
             ],
             resources: [
                 .copy("Assets/feather.png")
@@ -40,7 +40,7 @@ let package = Package(
         .testTarget(
             name: "FeatherMailTests",
             dependencies: [
-                .target(name: "FeatherMailTesting"),
+                .target(name: "FeatherMailTesting")
             ]
         ),
     ]
