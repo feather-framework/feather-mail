@@ -115,7 +115,7 @@ public extension MailTestSuite {
     func testAttachment(
         from: String,
         to: String,
-        subject: String,
+        subject: String
     ) async throws(MailError) {
 
         guard
