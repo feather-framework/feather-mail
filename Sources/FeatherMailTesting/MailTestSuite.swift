@@ -5,11 +5,7 @@
 //  Created by Tibor Bodecs on 2024. 04. 09..
 //
 
-#if canImport(FoundationEssentials)
-public import FoundationEssentials
-#else
-public import Foundation
-#endif
+import Foundation
 import FeatherMail
 
 /// A thread-safe utility designed to run a battery of tests against a `MailProtocol` implementation.

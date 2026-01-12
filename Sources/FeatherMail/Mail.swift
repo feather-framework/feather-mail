@@ -5,11 +5,7 @@
 //  Created by Tibor Bodecs on 2023. 01. 16..
 //
 
-#if canImport(FoundationEssentials)
-public import FoundationEssentials
-#else
-public import Foundation
-#endif
+import Foundation
 
 /// A thread-safe representation of an email message.
 public struct Mail: Sendable {
