@@ -5,12 +5,13 @@
 //  Created by Tibor Bodecs on 2023. 01. 16..
 //
 
-import XCTest
+import Testing
 import FeatherMail
 @testable import FeatherMailTesting
 
-final class FeatherMailTests: XCTestCase {
+final class FeatherMailTests {
 
+    @Test
     func testNormal() async throws {
 
         let mail = MailStruct()
@@ -19,6 +20,7 @@ final class FeatherMailTests: XCTestCase {
         try await mailTestSuite.testAll(from: "from@from.from", to: "to@to.to")
     }
 
+    @Test
     func testFromError() async throws {
 
         let mail = MailStruct()
@@ -30,11 +32,12 @@ final class FeatherMailTests: XCTestCase {
                 to: "to@to.com"
             )
         }
-        catch let error as MailTestSuiteError {
-            XCTAssertTrue(error.error as? MailError != nil)
+        catch let error {
+            #expect(error == .invalidSender)
         }
     }
 
+    @Test
     func testToError() async throws {
 
         let mail = MailStruct()
@@ -46,8 +49,26 @@ final class FeatherMailTests: XCTestCase {
                 to: ""
             )
         }
-        catch let error as MailTestSuiteError {
-            XCTAssertTrue(error.error as? MailError != nil)
+        catch let error {
+            #expect(error == .invalidRecipient)
+        }
+    }
+
+    @Test
+    func testSubjectError() async throws {
+
+        let mail = MailStruct()
+        let mailTestSuite = MailTestSuite(mail)
+
+        do {
+            try await mailTestSuite.testAll(
+                from: "from@from.from",
+                to: "to@to.com",
+                subject: ""
+            )
+        }
+        catch let error {
+            #expect(error == .invalidSubject)
         }
     }
 }

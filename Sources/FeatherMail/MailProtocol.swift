@@ -14,5 +14,5 @@ public protocol MailProtocol: Sendable {
     /// Asynchronously sends the specified email.
     /// - Parameter email: The `Mail` object to be sent. Must be pre-validated by its initializer.
     /// - Throws: `Error` if the delivery fails due to network or provider issues.
-    func send(_ email: Mail) async throws
+    func send(_ email: Mail) async throws(MailError)
 }

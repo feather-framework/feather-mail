@@ -6,7 +6,7 @@
 //
 
 /// Errors that can occur when initializing or sending a `Mail` object.
-public enum MailError: Error {
+public enum MailError: Error, Equatable {
 
     /// The 'from' address is missing or contains an invalid email string.
     case invalidSender
@@ -19,5 +19,5 @@ public enum MailError: Error {
     case invalidRecipient
 
     /// An underlying  error occurred.
-    case unknown(Error)
+    case unknown
 }

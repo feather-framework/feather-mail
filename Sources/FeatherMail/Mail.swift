@@ -116,7 +116,7 @@ public struct Mail: Sendable {
         body: Body,
         reference: String? = nil,
         attachments: [Attachment] = []
-    ) throws {
+    ) throws(MailError) {
 
         guard !from.email.trimmingCharacters(in: .whitespaces).isEmpty else {
             throw MailError.invalidSender

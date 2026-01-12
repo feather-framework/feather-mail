@@ -1,21 +1,23 @@
 // swift-tools-version:6.2
 import PackageDescription
 
+let defaultSwiftSettings: [SwiftSetting] = [
+    .swiftLanguageMode(.v6),
+    .enableExperimentalFeature(
+        "AvailabilityMacro=FeatherMailAvailability:macOS 13, iOS 16, watchOS 9, tvOS 16, visionOS 1"
+    ),
+    .enableUpcomingFeature("MemberImportVisibility"),
+    .enableExperimentalFeature("Lifetimes"),
+]
+
 let package = Package(
     name: "feather-mail",
-    platforms: [
-        .macOS(.v13),
-        .iOS(.v16),
-        .tvOS(.v16),
-        .watchOS(.v9),
-        .visionOS(.v1),
-    ],
+   
     products: [
         .library(name: "FeatherMail", targets: ["FeatherMail"]),
         .library(name: "FeatherMailTesting", targets: ["FeatherMailTesting"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/swiftlang/swift-docc-plugin", from: "1.4.2"),
         .package(url: "https://github.com/apple/swift-log", from: "1.8.0"),
     ],
     targets: [

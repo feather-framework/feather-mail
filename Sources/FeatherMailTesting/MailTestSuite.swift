@@ -12,33 +12,6 @@ public import Foundation
 #endif
 import FeatherMail
 
-/// An error type used to wrap and report failures within the `MailTestSuite`.
-/// It captures the specific location (function and line) where a test failed.
-public struct MailTestSuiteError: Error {
-
-    /// The name of the function where the error occurred.
-    public let function: String
-    /// The line number in the source code where the error was triggered.
-    public let line: Int
-    /// The underlying error that caused the failure, if any.
-    public let error: Error?
-
-    /// Initializes a test suite error with source location tracking.
-    /// - Parameters:
-    ///   - function: The function name (defaults to the caller's function name).
-    ///   - line: The line number (defaults to the caller's line number).
-    ///   - error: An optional underlying error to wrap.
-    init(
-        function: String = #function,
-        line: Int = #line,
-        error: Error? = nil
-    ) {
-        self.function = function
-        self.line = line
-        self.error = error
-    }
-}
-
 /// A thread-safe utility designed to run a battery of tests against a `MailProtocol` implementation.
 public struct MailTestSuite: Sendable {
 
@@ -55,27 +28,28 @@ public struct MailTestSuite: Sendable {
     /// - Parameters:
     ///   - from: The email address to be used as the sender.
     ///   - to: The email address to be used as the recipient.
+    ///   - subject: The email subject.
     /// - Throws: A `MailTestSuiteError` if any of the sub-tests fail.
     public func testAll(
         from: String,
-        to: String
-    ) async throws {
+        to: String,
+        subject: String = "Test subject"
+    ) async throws(MailError) {
         // Executes tests concurrently using async let
         async let tests: [Void] = [
-            testPlainText(from: from, to: to),
-            testHTML(from: from, to: to),
-            testAttachment(from: from, to: to),
+            testPlainText(from: from, to: to, subject: subject),
+            testHTML(from: from, to: to, subject: subject),
+            testAttachment(from: from, to: to, subject: subject),
         ]
 
         do {
             _ = try await tests
         }
-        catch let error as MailTestSuiteError {
+        catch let error as MailError {
             throw error
         }
         catch {
-            // Wraps unknown errors into the test suite error format
-            throw MailTestSuiteError(error: error)
+            throw MailError.unknown
         }
     }
 }
@@ -94,16 +68,18 @@ public extension MailTestSuite {
     /// - Parameters:
     ///   - from: Sender email address.
     ///   - to: Recipient email address.
+    ///   - subject: The email subject.
     ///
     /// - Throws: An error if the mail cannot be sent.
     func testPlainText(
         from: String,
-        to: String
-    ) async throws {
+        to: String,
+        subject: String
+    ) async throws(MailError) {
         let email = try Mail(
             from: .init(from),
             to: [.init(to)],
-            subject: "Test plain text email",
+            subject: subject,
             body: .plainText("This is a plain text email.")
         )
         try await mail.send(email)
@@ -115,15 +91,17 @@ public extension MailTestSuite {
     ///   - to: Recipient email address.
     ///   - `MailError` if the email object is invalid.
     ///   - `Error` if the mail service fails to send the message.
+    ///   - subject: The email subject.
     /// - Throws: An error if the mail cannot be sent.
     func testHTML(
         from: String,
-        to: String
-    ) async throws {
+        to: String,
+        subject: String
+    ) async throws(MailError) {
         let email = try Mail(
             from: .init(from),
             to: [.init(to)],
-            subject: "Test HTML email",
+            subject: subject,
             body: .html("This is a <b>HTML</b> email.")
         )
         try await mail.send(email)
@@ -136,11 +114,13 @@ public extension MailTestSuite {
     /// - Parameters:
     ///   - from: Sender email address.
     ///   - to: Recipient email address.
+    ///   - subject: The email subject.
     /// - Throws: An error if the mail cannot be sent.
     func testAttachment(
         from: String,
-        to: String
-    ) async throws {
+        to: String,
+        subject: String,
+    ) async throws(MailError) {
 
         guard
             let url = getAttachmentUrl(),
@@ -153,7 +133,7 @@ public extension MailTestSuite {
         let email = try Mail(
             from: .init(from),
             to: [.init(to)],
-            subject: "Test email attachment",
+            subject: subject,
             body: .plainText("This is a test email with an attachment."),
             attachments: [
                 .init(

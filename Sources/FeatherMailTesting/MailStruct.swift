@@ -17,7 +17,7 @@ public struct MailStruct: MailProtocol {
     ///
     /// - Parameter email: The validated `Mail` object to be "sent".
     /// - Throws: This implementation does not currently throw, but conforms to the async throws requirement of `MailProtocol`.
-    public func send(_ email: Mail) async throws {
+    public func send(_ email: Mail) async throws(MailError) {
         // do nothing
     }
 
