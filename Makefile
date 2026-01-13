@@ -36,4 +36,7 @@ fix-headers:
 	
 test:
 	swift test --parallel
+	
+docker-test:
+	docker build -t tests . -f ./Docker/Dockerfile.testing && docker run --rm tests
 
