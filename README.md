@@ -31,7 +31,7 @@ import PackageDescription
 let package = Package(
     name: "my-application",
     dependencies: [
-        .package(url: "https://github.com/feather-framework/feather-mail", .upToNextMinor(from: "0.4.0")),
+        .package(url: "https://github.com/feather-framework/feather-mail", .upToNextMinor(from: "0.6.0")),
     ],
     targets: [
         .target(name: "MyApplication", dependencies: [
