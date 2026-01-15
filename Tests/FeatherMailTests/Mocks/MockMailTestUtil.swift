@@ -1,22 +1,22 @@
 //
-//  MailTestSuite.swift
+//  MockMailTestUtil.swift
 //  feather-mail
 //
-//  Created by Tibor Bodecs on 2024. 04. 09..
+//  Created by Tibor Bödecs on 2024. 04. 09..
 //
 
 import Foundation
 import FeatherMail
 
 /// A thread-safe utility designed to run a battery of tests against a `MailProtocol` implementation.
-public struct MailTestSuite: Sendable {
+public struct MockMailTestUtil: Sendable {
 
     /// The mail service instance being tested.
-    let mail: MailStruct
+    let mail: MockMailStruct
 
     /// Initializes the test suite with a specific mail service.
-    /// - Parameter mail: The `MailStruct` instance to use for sending emails during tests.
-    public init(_ mail: MailStruct) {
+    /// - Parameter mail: The `MockMailStruct` instance to use for sending emails during tests.
+    public init(_ mail: MockMailStruct) {
         self.mail = mail
     }
 
@@ -50,7 +50,7 @@ public struct MailTestSuite: Sendable {
     }
 }
 
-public extension MailTestSuite {
+public extension MockMailTestUtil {
 
     /// Attempts to locate the test attachment file within the module bundle.
     /// - Returns: A `URL` pointing to the 'feather.png' resource, or nil if not found.

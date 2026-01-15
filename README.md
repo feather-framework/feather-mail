@@ -13,7 +13,7 @@ Use at your own risk.
 To add a dependency on the package, declare it in your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/feather-framework/feather-mail", .upToNextMinor(from: "0.4.0")),
+.package(url: "https://github.com/feather-framework/feather-mail", .upToNextMinor(from: "1.0.0-beta.1")),
 ```
 
 and to your application target, add `FeatherMail` to your dependencies:
@@ -31,7 +31,7 @@ import PackageDescription
 let package = Package(
     name: "my-application",
     dependencies: [
-        .package(url: "https://github.com/feather-framework/feather-mail", .upToNextMinor(from: "0.6.0")),
+        .package(url: "https://github.com/feather-framework/feather-mail", .upToNextMinor(from: "1.0.0-beta.1")),
     ],
     targets: [
         .target(name: "MyApplication", dependencies: [
@@ -46,5 +46,4 @@ let package = Package(
 
 ### Documentation
 
-The official API reference for this project is available at:
-[https://feather-framework.github.io/feather-mail/documentation/](https://feather-framework.github.io/feather-mail/documentation/)
+For more information, see the  official [API documentation](https://feather-framework.github.io/feather-mail/documentation/) for this package.

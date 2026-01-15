@@ -2,7 +2,7 @@
 //  Mail.swift
 //  feather-mail
 //
-//  Created by Tibor Bodecs on 2023. 01. 16..
+//  Created by Tibor Bödecs on 2023. 01. 16..
 //
 
 import Foundation

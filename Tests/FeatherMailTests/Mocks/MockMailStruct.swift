@@ -1,5 +1,5 @@
 //
-//  MailStruct.swift
+//  MockMailStruct.swift
 //  feather-mail
 //
 //  Created by Binary Birds on 2026. 01. 06..
@@ -8,7 +8,7 @@
 import FeatherMail
 
 /// A concrete implementation of `MailProtocol` used primarily for testing or as a no-op placeholder.
-public struct MailStruct: MailProtocol {
+public struct MockMailStruct: MailProtocol {
 
     /// Simulates the sending of an email.
     ///

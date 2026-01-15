@@ -1,21 +1,21 @@
 //
-//  FeatherMailTests.swift
+//  FeatherMailTestSuite.swift
 //  feather-mail
 //
-//  Created by Tibor Bodecs on 2023. 01. 16..
+//  Created by Tibor Bödecs on 2023. 01. 16..
 //
 
 import Testing
-import FeatherMail
-@testable import FeatherMailTesting
+@testable import FeatherMail
 
-final class FeatherMailTests {
+@Suite
+class FeatherMailTestSuite {
 
     @Test
     func testNormal() async throws {
 
-        let mail = MailStruct()
-        let mailTestSuite = MailTestSuite(mail)
+        let mail = MockMailStruct()
+        let mailTestSuite = MockMailTestUtil(mail)
 
         try await mailTestSuite.testAll(from: "from@from.from", to: "to@to.to")
     }
@@ -23,8 +23,8 @@ final class FeatherMailTests {
     @Test
     func testFromError() async throws {
 
-        let mail = MailStruct()
-        let mailTestSuite = MailTestSuite(mail)
+        let mail = MockMailStruct()
+        let mailTestSuite = MockMailTestUtil(mail)
 
         do {
             try await mailTestSuite.testAll(
@@ -40,8 +40,8 @@ final class FeatherMailTests {
     @Test
     func testToError() async throws {
 
-        let mail = MailStruct()
-        let mailTestSuite = MailTestSuite(mail)
+        let mail = MockMailStruct()
+        let mailTestSuite = MockMailTestUtil(mail)
 
         do {
             try await mailTestSuite.testAll(
@@ -57,8 +57,8 @@ final class FeatherMailTests {
     @Test
     func testSubjectError() async throws {
 
-        let mail = MailStruct()
-        let mailTestSuite = MailTestSuite(mail)
+        let mail = MockMailStruct()
+        let mailTestSuite = MockMailTestUtil(mail)
 
         do {
             try await mailTestSuite.testAll(

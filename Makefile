@@ -38,5 +38,5 @@ test:
 	swift test --parallel
 	
 docker-test:
-	docker build -t tests . -f ./Docker/Dockerfile.testing && docker run --rm tests
+	docker build -t tests . -f ./docker/tests/Dockerfile && docker run --rm tests
 
