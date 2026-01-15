@@ -9,7 +9,7 @@ import Testing
 @testable import FeatherMail
 
 @Suite
-class FeatherMailTestSuite {
+struct FeatherMailTestSuite {
 
     @Test
     func testNormal() async throws {
