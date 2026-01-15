@@ -1,33 +1,74 @@
 //
 //  FeatherMailTests.swift
-//  FeatherMailTests
+//  feather-mail
 //
 //  Created by Tibor Bodecs on 2023. 01. 16..
 //
 
-import XCTest
-import FeatherComponent
+import Testing
 import FeatherMail
+@testable import FeatherMailTesting
 
-final class FeatherMailTests: XCTestCase {
+final class FeatherMailTests {
 
-    func testSendMail() async throws {
-        let registry = ComponentRegistry()
+    @Test
+    func testNormal() async throws {
 
-        try await registry.addMail(MyMailComponentContext())
+        let mail = MailStruct()
+        let mailTestSuite = MailTestSuite(mail)
 
-        let mail = try await registry.mail()
-        XCTAssertNotNil(mail)
+        try await mailTestSuite.testAll(from: "from@from.from", to: "to@to.to")
+    }
 
-        let email = try Mail(
-            from: .init("from@from.from"),
-            to: [
-                .init("to@to.to")
-            ],
-            subject: "Test plain text email",
-            body: .plainText("This is a plain text email.")
-        )
+    @Test
+    func testFromError() async throws {
 
-        try await mail.send(email)
+        let mail = MailStruct()
+        let mailTestSuite = MailTestSuite(mail)
+
+        do {
+            try await mailTestSuite.testAll(
+                from: "",
+                to: "to@to.com"
+            )
+        }
+        catch let error {
+            #expect(error == .invalidSender)
+        }
+    }
+
+    @Test
+    func testToError() async throws {
+
+        let mail = MailStruct()
+        let mailTestSuite = MailTestSuite(mail)
+
+        do {
+            try await mailTestSuite.testAll(
+                from: "from@from.from",
+                to: ""
+            )
+        }
+        catch let error {
+            #expect(error == .invalidRecipient)
+        }
+    }
+
+    @Test
+    func testSubjectError() async throws {
+
+        let mail = MailStruct()
+        let mailTestSuite = MailTestSuite(mail)
+
+        do {
+            try await mailTestSuite.testAll(
+                from: "from@from.from",
+                to: "to@to.com",
+                subject: ""
+            )
+        }
+        catch let error {
+            #expect(error == .invalidSubject)
+        }
     }
 }

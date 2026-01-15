@@ -1,23 +1,15 @@
 {
+  "originHash" : "7fabbf17cf01708cb2347144738c1300dc8d5fb882d90337986e603b666ab0b3",
   "pins" : [
-    {
-      "identity" : "feather-component",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/feather-framework/feather-component",
-      "state" : {
-        "revision" : "c209d87352d27afc124422db11c9ca2bb0f7a376",
-        "version" : "0.5.0"
-      }
-    },
     {
       "identity" : "swift-log",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log",
       "state" : {
-        "revision" : "e97a6fcb1ab07462881ac165fdbb37f067e205d5",
-        "version" : "1.5.4"
+        "revision" : "bc386b95f2a16ccd0150a8235e7c69eab2b866ca",
+        "version" : "1.8.0"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
