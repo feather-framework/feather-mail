@@ -2,7 +2,7 @@
 //  MailValidating.swift
 //  feather-mail
 //
-//  Created by gerp83 on 2026. 01. 16.
+//  Created by gerp83 on 2026. 01. 16..
 //
 
 /// A protocol defining validation rules for `Mail` objects.

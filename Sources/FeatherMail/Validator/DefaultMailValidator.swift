@@ -2,7 +2,7 @@
 //  DefaultMailValidator.swift
 //  feather-mail
 //
-//  Created by gerp83 on 2026. 01. 16.
+//  Created by gerp83 on 2026. 01. 16..
 //
 
 /// Default, transport-agnostic validator for `Mail`.
