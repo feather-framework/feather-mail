@@ -7,7 +7,7 @@
 
 /// Represents an email identity consisting of an email string and an optional display name.
 public struct Address: Sendable {
-    
+
     /// The raw email address string (e.g. "user@example.com").
     public let email: String
 
@@ -25,7 +25,7 @@ public struct Address: Sendable {
         self.email = email
         self.name = name
     }
-    
+
     /// Indicates whether the address contains a non-empty email value.
     ///
     /// This is a lightweight sanity check and does not perform full
@@ -48,5 +48,5 @@ public struct Address: Sendable {
         }
         return email
     }
-    
+
 }

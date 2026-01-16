@@ -13,8 +13,10 @@ import FeatherMail
 /// `DefaultMailValidator`.
 public struct MockMailStruct: MailProtocol, Sendable {
 
+    /// the validator
     private let validator: MailValidating
 
+    /// Initializes a MockMailStruct object.
     public init(
         validator: MailValidating = DefaultMailValidator()
     ) {

@@ -5,7 +5,6 @@
 //  Created by Tibor Bödecs on 2023. 01. 16..
 //
 
-
 /// A protocol defining a mail delivery mechanism.
 public protocol MailProtocol: Sendable {
 
