@@ -2,22 +2,22 @@
 //  Address.swift
 //  feather-mail
 //
-//  Created by Tibor Bödecs on 2023. 01. 16..
+//  Created by Binary Birds on 2026. 01. 19..
 //
 
-/// Represents an email identity consisting of an email string and an optional display name.
+/// Email address with an optional display name.
 public struct Address: Sendable {
 
-    /// The raw email address string (e.g. "user@example.com").
+    /// Raw email address string (e.g. "user@example.com").
     public let email: String
 
-    /// An optional human-readable display name (e.g. "John Doe").
+    /// Optional display name (e.g. "John Doe").
     public let name: String?
 
-    /// Creates a new email address.
+    /// Creates an email address.
     /// - Parameters:
     ///   - email: The email address string.
-    ///   - name: An optional display name.
+    ///   - name: Optional display name.
     public init(
         _ email: String,
         name: String? = nil
@@ -26,22 +26,19 @@ public struct Address: Sendable {
         self.name = name
     }
 
-    /// Indicates whether the address contains a non-empty email value.
+    /// Indicates whether the email value is non-empty.
     ///
-    /// This is a lightweight sanity check and does not perform full
-    /// RFC-compliant email validation.
+    /// This is a lightweight sanity check and does not attempt RFC validation.
     var isValid: Bool {
-        !email.trimmingCharacters(in: .whitespaces).isEmpty
+        email.contains(where: { !$0.isWhitespace })
     }
 
-    /// Returns a MIME-compatible string representation of the address.
+    /// Returns a header-ready representation of the address.
     ///
-    /// If a display name is present, the format will be:
+    /// If a display name is present, the format is:
     /// `Name <email@example.com>`
     ///
     /// Otherwise, only the email address is returned.
-    ///
-    /// This representation is suitable for use in email headers.
     public var mime: String {
         if let name {
             return "\(name) <\(email)>"

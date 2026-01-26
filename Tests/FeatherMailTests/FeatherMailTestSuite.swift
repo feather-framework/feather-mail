@@ -2,21 +2,26 @@
 //  FeatherMailTestSuite.swift
 //  feather-mail
 //
-//  Created by Tibor Bödecs on 2023. 01. 16..
+//  Created by Binary Birds on 2026. 01. 19..
 //
 
-import Foundation
 import Testing
 @testable import FeatherMail
 
+/// Validation tests for basic mail rules.
 @Suite
 struct FeatherMailTestSuite {
 
-    // MARK: - Invalid sender
+    struct SampleError: Error, CustomStringConvertible {
+        let message: String
+        var description: String { message }
+    }
+
+    // MARK: - Invalid Sender
 
     @Test
     func invalidSenderThrows() async {
-        let driver = MockMailStruct()
+        let client = MockMailClient()
 
         let mail = Mail(
             from: .init("   "),
@@ -25,16 +30,16 @@ struct FeatherMailTestSuite {
             body: .plainText("Body")
         )
 
-        await #expect(throws: MailError.invalidSender) {
-            try await driver.send(mail)
+        await #expect(throws: MailValidationError.invalidSender) {
+            try await client.validate(mail)
         }
     }
 
-    // MARK: - Invalid subject
+    // MARK: - Invalid Subject
 
     @Test
     func invalidSubjectThrows() async {
-        let driver = MockMailStruct()
+        let client = MockMailClient()
 
         let mail = Mail(
             from: .init("from@example.com"),
@@ -43,16 +48,16 @@ struct FeatherMailTestSuite {
             body: .plainText("Body")
         )
 
-        await #expect(throws: MailError.invalidSubject) {
-            try await driver.send(mail)
+        await #expect(throws: MailValidationError.invalidSubject) {
+            try await client.validate(mail)
         }
     }
 
-    // MARK: - Invalid recipient
+    // MARK: - Invalid Recipient
 
     @Test
     func invalidRecipientThrows() async {
-        let driver = MockMailStruct()
+        let client = MockMailClient()
 
         let mail = Mail(
             from: .init("from@example.com"),
@@ -61,21 +66,21 @@ struct FeatherMailTestSuite {
             body: .plainText("Body")
         )
 
-        await #expect(throws: MailError.invalidRecipient) {
-            try await driver.send(mail)
+        await #expect(throws: MailValidationError.invalidRecipient) {
+            try await client.validate(mail)
         }
     }
 
-    // MARK: - Attachments too large
+    // MARK: - Attachments Too Large
 
     @Test
     func attachmentsTooLargeThrows() async {
-        let validator = DefaultMailValidator(
+        let validator = BasicMailValidator(
             maxTotalAttachmentSize: 100
         )
-        let driver = MockMailStruct(validator: validator)
+        let client = MockMailClient(validator: validator)
 
-        let data = Data(repeating: 0, count: 1_024)
+        let data = [UInt8](repeating: 0, count: 1_024)
 
         let mail = Mail(
             from: .init("from@example.com"),
@@ -91,16 +96,16 @@ struct FeatherMailTestSuite {
             ]
         )
 
-        await #expect(throws: MailError.attachmentsTooLarge) {
-            try await driver.send(mail)
+        await #expect(throws: MailValidationError.attachmentsTooLarge) {
+            try await client.validate(mail)
         }
     }
 
-    // MARK: - Header injection
+    // MARK: - Header Injection
 
     @Test
     func headerInjectionThrows() async {
-        let driver = MockMailStruct()
+        let client = MockMailClient()
 
         let mail = Mail(
             from: .init("from@example.com"),
@@ -109,16 +114,50 @@ struct FeatherMailTestSuite {
             body: .plainText("Body")
         )
 
-        await #expect(throws: MailError.headerInjectionDetected) {
-            try await driver.send(mail)
+        await #expect(throws: MailValidationError.headerInjectionDetected) {
+            try await client.validate(mail)
         }
     }
 
-    // MARK: - Valid mail
+    // MARK: - Address MIME
+
+    @Test
+    func addressMimeFormatsDisplayName() {
+        let named = Address("john@example.com", name: "John Doe")
+        #expect(named.mime == "John Doe <john@example.com>")
+
+        let plain = Address("john@example.com")
+        #expect(plain.mime == "john@example.com")
+    }
+
+    // MARK: - MailError Equality
+
+    @Test
+    func mailErrorEqualityMatchesCases() {
+        #expect(
+            MailError.validation(.invalidSender) == .validation(.invalidSender)
+        )
+        #expect(
+            MailError.validation(.invalidSender) != .validation(.invalidSubject)
+        )
+
+        #expect(MailError.custom("A") == .custom("A"))
+        #expect(MailError.custom("A") != .custom("B"))
+
+        let leftUnknown = MailError.unknown(SampleError(message: "boom"))
+        let rightUnknown = MailError.unknown(SampleError(message: "boom"))
+        let otherUnknown = MailError.unknown(SampleError(message: "other"))
+
+        #expect(leftUnknown == rightUnknown)
+        #expect(leftUnknown != otherUnknown)
+        #expect(leftUnknown != .custom("boom"))
+    }
+
+    // MARK: - Valid Mail
 
     @Test
     func validMailSucceeds() async throws {
-        let driver = MockMailStruct()
+        let client = MockMailClient()
 
         let mail = Mail(
             from: .init("from@example.com"),
@@ -127,6 +166,6 @@ struct FeatherMailTestSuite {
             body: .plainText("Body")
         )
 
-        try await driver.send(mail)
+        try await client.validate(mail)
     }
 }

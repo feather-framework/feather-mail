@@ -2,15 +2,15 @@
 //  Body.swift
 //  feather-mail
 //
-//  Created by Tibor Bödecs on 2023. 01. 16..
+//  Created by Binary Birds on 2026. 01. 19..
 //
 
-/// Represents the body content of an email message.
+/// Email body content variants.
 public enum Body: Sendable {
 
-    /// Plain, unformatted text content.
+    /// Plain text content.
     case plainText(String)
 
-    /// HTML-formatted content for rich-text emails.
+    /// HTML content for rich text messages.
     case html(String)
 }

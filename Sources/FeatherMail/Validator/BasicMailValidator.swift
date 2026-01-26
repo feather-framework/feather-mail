@@ -1,28 +1,27 @@
 //
-//  DefaultMailValidator.swift
+//  BasicMailValidator.swift
 //  feather-mail
 //
-//  Created by gerp83 on 2026. 01. 16..
+//  Created by Binary Birds on 2026. 01. 19..
 //
 
-/// Default, transport-agnostic validator for `Mail`.
+/// Transport-agnostic validator for `Mail`.
 ///
-/// This validator performs lightweight sanity checks that are cheap,
-/// deterministic, and safe to run before attempting delivery.
+/// Performs inexpensive, deterministic checks before delivery.
 ///
 /// Validation rules:
-/// - sender address must not be empty
-/// - subject must not be empty
+/// - sender address must be non-empty
+/// - subject must be non-empty
 /// - at least one valid recipient must exist
 /// - basic header injection prevention
 /// - optional total attachment size limit
-public struct DefaultMailValidator: MailValidating, Sendable {
+public struct BasicMailValidator: MailValidator, Sendable {
 
     /// Maximum allowed total attachment size in bytes.
     /// If `nil`, attachment size validation is skipped.
     private let maxTotalAttachmentSize: Int?
 
-    /// Creates a new default mail validator.
+    /// Creates a mail validator.
     ///
     /// - Parameter maxTotalAttachmentSize: Optional maximum total size of all
     ///   attachments combined, in bytes.
@@ -30,11 +29,11 @@ public struct DefaultMailValidator: MailValidating, Sendable {
         self.maxTotalAttachmentSize = maxTotalAttachmentSize
     }
 
-    /// Validates the given mail instance.
+    /// Validates a mail message.
     ///
     /// - Parameter mail: The `Mail` object to validate.
-    /// - Throws: `MailError` if validation fails.
-    public func validate(_ mail: Mail) throws(MailError) {
+    /// - Throws: `MailValidationError` if validation fails.
+    public func validate(_ mail: Mail) throws(MailValidationError) {
 
         try validateSender(mail)
         try validateSubject(mail)
@@ -42,49 +41,49 @@ public struct DefaultMailValidator: MailValidating, Sendable {
         try validateAttachments(mail)
         try validateSecurity(mail)
     }
+
 }
 
 // MARK: - Validation Rules
 
-private extension DefaultMailValidator {
+private extension BasicMailValidator {
 
-    /// Validates the sender address.
-    func validateSender(_ mail: Mail) throws(MailError) {
-        guard !mail.from.email.trimmingCharacters(in: .whitespaces).isEmpty
-        else {
-            throw MailError.invalidSender
+    /// Ensures the sender address is non-empty.
+    func validateSender(_ mail: Mail) throws(MailValidationError) {
+        guard hasNonWhitespace(mail.from.email) else {
+            throw MailValidationError.invalidSender
         }
     }
 
-    /// Validates the subject line.
-    func validateSubject(_ mail: Mail) throws(MailError) {
-        guard !mail.subject.trimmingCharacters(in: .whitespaces).isEmpty else {
-            throw MailError.invalidSubject
+    /// Ensures the subject line is non-empty.
+    func validateSubject(_ mail: Mail) throws(MailValidationError) {
+        guard hasNonWhitespace(mail.subject) else {
+            throw MailValidationError.invalidSubject
         }
     }
 
-    /// Ensures at least one valid recipient exists.
-    func validateRecipients(_ mail: Mail) throws(MailError) {
+    /// Ensures at least one recipient is valid.
+    func validateRecipients(_ mail: Mail) throws(MailValidationError) {
         let recipients = mail.to + mail.cc + mail.bcc
         guard recipients.contains(where: \.isValid) else {
-            throw MailError.invalidRecipient
+            throw MailValidationError.invalidRecipient
         }
     }
 
     /// Validates total attachment size if a limit is configured.
-    func validateAttachments(_ mail: Mail) throws(MailError) {
+    func validateAttachments(_ mail: Mail) throws(MailValidationError) {
         guard let maxSize = maxTotalAttachmentSize else {
             return
         }
 
         let totalSize = mail.attachments.reduce(0) { $0 + $1.data.count }
         guard totalSize <= maxSize else {
-            throw MailError.attachmentsTooLarge
+            throw MailValidationError.attachmentsTooLarge
         }
     }
 
     /// Prevents basic email header injection attacks.
-    func validateSecurity(_ mail: Mail) throws(MailError) {
+    func validateSecurity(_ mail: Mail) throws(MailValidationError) {
         let valuesToCheck = [
             mail.subject,
             mail.from.email,
@@ -95,7 +94,11 @@ private extension DefaultMailValidator {
                 !$0.contains("\n") && !$0.contains("\r")
             })
         else {
-            throw MailError.headerInjectionDetected
+            throw MailValidationError.headerInjectionDetected
         }
+    }
+
+    func hasNonWhitespace(_ value: String) -> Bool {
+        value.contains(where: { !$0.isWhitespace })
     }
 }

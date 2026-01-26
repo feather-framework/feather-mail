@@ -2,52 +2,51 @@
 //  Mail.swift
 //  feather-mail
 //
-//  Created by Tibor Bödecs on 2023. 01. 16..
+//  Created by Binary Birds on 2026. 01. 19..
 //
 
-/// A thread-safe representation of an email message.
+/// Immutable email message payload.
 public struct Mail: Sendable {
 
-    /// The originating sender address.
+    /// Sender address.
     public let from: Address
 
-    /// The list of primary recipients.
+    /// Primary recipients.
     public let to: [Address]
 
-    /// The list of carbon copy recipients.
+    /// Carbon copy recipients.
     public let cc: [Address]
 
-    /// The list of blind carbon copy recipients.
+    /// Blind carbon copy recipients.
     public let bcc: [Address]
 
-    /// The list of addresses where replies should be directed.
+    /// Reply-to addresses.
     public let replyTo: [Address]
 
-    /// The subject line of the email.
+    /// Subject line.
     public let subject: String
 
-    /// The message body content.
+    /// Message body content.
     public let body: Body
 
-    /// An optional reference identifier used for threading.
+    /// Optional reference identifier for threading.
     public let reference: String?
 
-    /// Files attached to the email.
+    /// File attachments.
     public let attachments: [Attachment]
 
-    /// Initializes a Mail object.
+    /// Creates a mail message.
     ///
     /// - Parameters:
-    ///   - from: The sender's address. Must not be empty.
+    ///   - from: The sender's address.
     ///   - to: An array of primary recipients.
-    ///   - cc: An array of carbon copy recipients. Defaults to empty.
-    ///   - bcc: An array of blind carbon copy recipients. Defaults to empty.
-    ///   - replyTo: An array of addresses for replies. Defaults to empty.
-    ///   - subject: The email subject. Must not be empty to avoid spam filtering.
-    ///   - body: The message body content.
-    ///   - reference: An optional string for message headers (threading).
-    ///   - attachments: An array of file attachments. Defaults to empty.
-    ///
+    ///   - cc: Carbon copy recipients. Defaults to empty.
+    ///   - bcc: Blind carbon copy recipients. Defaults to empty.
+    ///   - replyTo: Reply-to addresses. Defaults to empty.
+    ///   - subject: Subject line.
+    ///   - body: Message body content.
+    ///   - reference: Optional threading reference string.
+    ///   - attachments: File attachments. Defaults to empty.
     public init(
         from: Address,
         to: [Address],
@@ -59,7 +58,6 @@ public struct Mail: Sendable {
         reference: String? = nil,
         attachments: [Attachment] = []
     ) {
-
         self.from = from
         self.to = to
         self.cc = cc

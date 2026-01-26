@@ -46,4 +46,4 @@ let package = Package(
 
 ### Documentation
 
-For more information, see the  official [API documentation](https://feather-framework.github.io/feather-mail/documentation/) for this package.
+For more information, see the  official [API documentation](https://feather-framework.github.io/feather-mail/) for this package.
