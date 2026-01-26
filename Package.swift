@@ -28,6 +28,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-log", from: "1.6.0"),
+        // [docc-plugin-placeholder]
     ],
     
     targets: [
