@@ -27,8 +27,8 @@ let package = Package(
         .library(name: "FeatherMail", targets: ["FeatherMail"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-log", from: "1.6.0"),
         // [docc-plugin-placeholder]
+        .package(url: "https://github.com/apple/swift-log", from: "1.6.0"),
     ],
     
     targets: [
