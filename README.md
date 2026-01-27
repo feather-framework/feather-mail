@@ -47,6 +47,13 @@ API documentation is available at the following [link](https://feather-framework
 > [!WARNING]
 > This repository is a work in progress, things can break until it reaches v1.0.0.
 
+## Mail drivers
+
+The following mail driver implementations are available for use:
+
+- [SES](https://github.com/feather-framework/feather-mail-driver-ses)
+- [SMTP](https://github.com/feather-framework/feather-mail-driver-smtp)
+
 ## Development
 
 - Build: `swift build`
