@@ -51,8 +51,9 @@ API documentation is available at the following [link](https://feather-framework
 
 The following mail driver implementations are available for use:
 
-- [SES](https://github.com/feather-framework/feather-mail-driver-ses)
-- [SMTP](https://github.com/feather-framework/feather-mail-driver-smtp)
+- [SES Driver](https://github.com/feather-framework/feather-mail-driver-ses)
+- [SMTP Driver](https://github.com/feather-framework/feather-mail-driver-smtp)
+- [Memory Driver](https://github.com/feather-framework/feather-memory-mail)
 
 ## Development
 
