@@ -2,48 +2,60 @@
 
 An abstract mail component for Feather CMS.
 
-## Getting started
+![Release: 1.0.0-beta.1](https://img.shields.io/badge/Release-1%2E0%2E0--beta%2E1-F05138)
 
-⚠️ This repository is a work in progress, things can break until it reaches v1.0.0.
+## Features
 
-Use at your own risk.
+- Immutable mail payload model
+- Validation helpers and errors
+- Raw MIME encoder for transport providers
+- Attachments and HTML support
 
-### Adding the dependency
+## Requirements
 
-To add a dependency on the package, declare it in your `Package.swift`:
+![Swift 6.1+](https://img.shields.io/badge/Swift-6%2E1%2B-F05138)
+![Platforms: macOS, iOS, tvOS, watchOS, visionOS](https://img.shields.io/badge/Platforms-macOS_%7C_iOS_%7C_tvOS_%7C_watchOS_%7C_visionOS-F05138)
+
+- Swift 6.1+
+- Platforms:
+    - macOS 13+
+    - iOS 16+
+    - tvOS 16+
+    - watchOS 9+
+    - visionOS 1+
+
+## Installation
+
+Use Swift Package Manager; add the dependency to your `Package.swift` file:
 
 ```swift
 .package(url: "https://github.com/feather-framework/feather-mail", .upToNextMinor(from: "1.0.0-beta.1")),
 ```
 
-and to your application target, add `FeatherMail` to your dependencies:
+Then add `FeatherMail` to your target dependencies:
 
 ```swift
-.product(name: "FeatherMail", package: "feather-mail")
+.product(name: "FeatherMail", package: "feather-mail"),
 ```
 
-Example `Package.swift` file with `FeatherMail` as a dependency:
+## Usage
 
-```swift
-// swift-tools-version:6.2
-import PackageDescription
+![DocC API documentation](https://img.shields.io/badge/DocC-API_documentation-F05138)
 
-let package = Package(
-    name: "my-application",
-    dependencies: [
-        .package(url: "https://github.com/feather-framework/feather-mail", .upToNextMinor(from: "1.0.0-beta.1")),
-    ],
-    targets: [
-        .target(name: "MyApplication", dependencies: [
-            .product(name: "FeatherMail", package: "feather-mail")
-        ]),
-        .testTarget(name: "MyApplicationTests", dependencies: [
-            .target(name: "MyApplication"),
-        ]),
-    ]
-)
-```
+API documentation is available at the following [link](https://feather-framework.github.io/feather-mail/).
 
-### Documentation
+> [!WARNING]
+> This repository is a work in progress, things can break until it reaches v1.0.0.
 
-For more information, see the  official [API documentation](https://feather-framework.github.io/feather-mail/) for this package.
+## Development
+
+- Build: `swift build`
+- Test:
+    - local: `make test`
+    - using Docker: `make docker-test`
+- Format: `make format`
+- Check: `make check`
+
+## Contributing
+
+[Pull requests](https://github.com/feather-framework/feather-mail/pulls) are welcome. Please keep changes focused and include tests for new logic.
