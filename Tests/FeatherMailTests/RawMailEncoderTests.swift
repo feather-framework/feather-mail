@@ -88,7 +88,6 @@ struct RawMailEncoderTests {
         #expect(raw.contains("References: <ref@example.com>\r\n"))
     }
 
-
     @Test
     func htmlWithAttachmentUsesMultipartAndHtmlBody() throws {
         let attachment = FeatherMail.Attachment(
@@ -109,7 +108,11 @@ struct RawMailEncoderTests {
 
         #expect(raw.contains("Content-type: multipart/mixed; boundary=\""))
         #expect(raw.contains("Content-Type: text/html; charset=\"UTF-8\"\r\n"))
-        #expect(raw.contains("Content-Disposition: attachment; filename=\"image.png\""))
+        #expect(
+            raw.contains(
+                "Content-Disposition: attachment; filename=\"image.png\""
+            )
+        )
     }
 
     @Test
@@ -131,7 +134,11 @@ struct RawMailEncoderTests {
         )
 
         #expect(raw.contains("Content-type: multipart/mixed; boundary=\""))
-        #expect(raw.contains("Content-Disposition: attachment; filename=\"file.txt\""))
+        #expect(
+            raw.contains(
+                "Content-Disposition: attachment; filename=\"file.txt\""
+            )
+        )
         #expect(raw.contains("Content-Transfer-Encoding: base64"))
         #expect(raw.contains("SGVsbG8="))
 
