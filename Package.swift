@@ -11,7 +11,7 @@ var defaultSwiftSettings: [SwiftSetting] = [
     // https://forums.swift.org/t/experimental-support-for-lifetime-dependencies-in-swift-6-2-and-beyond/78638
     .enableExperimentalFeature("Lifetimes"),
     // https://github.com/swiftlang/swift/pull/65218
-    .enableExperimentalFeature("AvailabilityMacro=FeatherMailAvailability:macOS 13, iOS 16, watchOS 9, tvOS 16, visionOS 1"),
+    .enableExperimentalFeature("AvailabilityMacro=FeatherMailAvailability:macOS 15, iOS 18, watchOS 9, tvOS 11, visionOS 2"),
 ]
 
 #if compiler(>=6.2)

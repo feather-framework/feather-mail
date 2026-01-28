@@ -2,7 +2,11 @@
 
 An abstract mail component for Feather CMS.
 
-![Release: 1.0.0-beta.1](https://img.shields.io/badge/Release-1%2E0%2E0--beta%2E1-F05138)
+[
+    ![Release: 1.0.0-beta.1](https://img.shields.io/badge/Release-1%2E0%2E0--beta%2E1-F05138)
+](
+    https://github.com/feather-framework/feather-mail/releases/tag/1.0.0-beta.1
+)
 
 ## Features
 
@@ -18,11 +22,11 @@ An abstract mail component for Feather CMS.
 
 - Swift 6.1+
 - Platforms:
-    - macOS 13+
-    - iOS 16+
-    - tvOS 16+
-    - watchOS 9+
-    - visionOS 1+
+    - macOS 15+
+    - iOS 18+
+    - tvOS 18+
+    - watchOS 11+
+    - visionOS 2+
 
 ## Installation
 
@@ -40,9 +44,13 @@ Then add `FeatherMail` to your target dependencies:
 
 ## Usage
 
-![DocC API documentation](https://img.shields.io/badge/DocC-API_documentation-F05138)
+[ 
+    ![DocC API documentation](https://img.shields.io/badge/DocC-API_documentation-F05138)
+](
+    https://feather-framework.github.io/feather-mail/
+)
 
-API documentation is available at the following [link](https://feather-framework.github.io/feather-mail/).
+API documentation is available at the following link.
 
 > [!WARNING]
 > This repository is a work in progress, things can break until it reaches v1.0.0.
