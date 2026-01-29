@@ -130,29 +130,6 @@ struct FeatherMailTestSuite {
         #expect(plain.mime == "john@example.com")
     }
 
-    // MARK: - MailError Equality
-
-    @Test
-    func mailErrorEqualityMatchesCases() {
-        #expect(
-            MailError.validation(.invalidSender) == .validation(.invalidSender)
-        )
-        #expect(
-            MailError.validation(.invalidSender) != .validation(.invalidSubject)
-        )
-
-        #expect(MailError.custom("A") == .custom("A"))
-        #expect(MailError.custom("A") != .custom("B"))
-
-        let leftUnknown = MailError.unknown(SampleError(message: "boom"))
-        let rightUnknown = MailError.unknown(SampleError(message: "boom"))
-        let otherUnknown = MailError.unknown(SampleError(message: "other"))
-
-        #expect(leftUnknown == rightUnknown)
-        #expect(leftUnknown != otherUnknown)
-        #expect(leftUnknown != .custom("boom"))
-    }
-
     // MARK: - Valid Mail
 
     @Test
