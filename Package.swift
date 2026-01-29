@@ -1,25 +1,36 @@
-// swift-tools-version:6.2
+// swift-tools-version:6.1
 import PackageDescription
 
-let defaultSwiftSettings: [SwiftSetting] = [
+// NOTE: https://github.com/swift-server/swift-http-server/blob/main/Package.swift
+var defaultSwiftSettings: [SwiftSetting] = [
+    
+    // https://github.com/swiftlang/swift-evolution/blob/main/proposals/0441-formalize-language-mode-terminology.md
     .swiftLanguageMode(.v6),
-    .enableExperimentalFeature(
-        "AvailabilityMacro=FeatherMailAvailability:macOS 13, iOS 16, watchOS 9, tvOS 16, visionOS 1"
-    ),
+    // https://github.com/swiftlang/swift-evolution/blob/main/proposals/0444-member-import-visibility.md
     .enableUpcomingFeature("MemberImportVisibility"),
+    // https://forums.swift.org/t/experimental-support-for-lifetime-dependencies-in-swift-6-2-and-beyond/78638
     .enableExperimentalFeature("Lifetimes"),
+    // https://github.com/swiftlang/swift/pull/65218
+    .enableExperimentalFeature("AvailabilityMacro=FeatherMailAvailability:macOS 15, iOS 18, watchOS 9, tvOS 11, visionOS 2"),
 ]
+
+#if compiler(>=6.2)
+defaultSwiftSettings.append(
+    // https://github.com/swiftlang/swift-evolution/blob/main/proposals/0461-async-function-isolation.md
+    .enableUpcomingFeature("NonisolatedNonsendingByDefault")
+)
+#endif
 
 let package = Package(
     name: "feather-mail",
-   
     products: [
         .library(name: "FeatherMail", targets: ["FeatherMail"]),
-        .library(name: "FeatherMailTesting", targets: ["FeatherMailTesting"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-log", from: "1.8.0"),
+        // [docc-plugin-placeholder]
+        .package(url: "https://github.com/apple/swift-log", from: "1.6.0"),
     ],
+    
     targets: [
         .target(
             name: "FeatherMail",
@@ -27,8 +38,8 @@ let package = Package(
                 .product(name: "Logging", package: "swift-log"),
             ]
         ),
-        .target(
-            name: "FeatherMailTesting",
+        .testTarget(
+            name: "FeatherMailTests",
             dependencies: [
                 .target(name: "FeatherMail"),
             ],
@@ -36,11 +47,6 @@ let package = Package(
                 .copy("Assets/feather.png")
             ]
         ),
-        .testTarget(
-            name: "FeatherMailTests",
-            dependencies: [
-                .target(name: "FeatherMailTesting"),
-            ]
-        ),
-    ]
+    ],
+    
 )
