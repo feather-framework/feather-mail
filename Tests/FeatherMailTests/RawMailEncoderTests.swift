@@ -5,6 +5,7 @@
 //  Created by Binary Birds on 2026. 01. 26..
 //
 
+import Foundation
 import Testing
 @testable import FeatherMail
 
