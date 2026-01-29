@@ -11,7 +11,7 @@ var defaultSwiftSettings: [SwiftSetting] = [
     // https://forums.swift.org/t/experimental-support-for-lifetime-dependencies-in-swift-6-2-and-beyond/78638
     .enableExperimentalFeature("Lifetimes"),
     // https://github.com/swiftlang/swift/pull/65218
-    .enableExperimentalFeature("AvailabilityMacro=FeatherMailAvailability:macOS 15, iOS 18, watchOS 9, tvOS 11, visionOS 2"),
+    .enableExperimentalFeature("AvailabilityMacro=featherMail:macOS 15, iOS 18, watchOS 9, tvOS 11, visionOS 2"),
 ]
 
 #if compiler(>=6.2)
@@ -28,15 +28,13 @@ let package = Package(
     ],
     dependencies: [
         // [docc-plugin-placeholder]
-        .package(url: "https://github.com/apple/swift-log", from: "1.6.0"),
     ],
     
     targets: [
         .target(
             name: "FeatherMail",
-            dependencies: [
-                .product(name: "Logging", package: "swift-log"),
-            ]
+            dependencies: [],
+            swiftSettings: defaultSwiftSettings
         ),
         .testTarget(
             name: "FeatherMailTests",
@@ -45,7 +43,8 @@ let package = Package(
             ],
             resources: [
                 .copy("Assets/feather.png")
-            ]
+            ],
+            swiftSettings: defaultSwiftSettings
         ),
     ],
     
