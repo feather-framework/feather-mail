@@ -2,9 +2,7 @@
 
 An abstract mail component for Feather CMS.
 
-[
-    ![Release: 1.0.0-beta.1](https://img.shields.io/badge/Release-1%2E0%2E0--beta%2E1-F05138)
-](
+[![Release: 1.0.0-beta.1](https://img.shields.io/badge/Release-1%2E0%2E0--beta%2E1-F05138)](
     https://github.com/feather-framework/feather-mail/releases/tag/1.0.0-beta.1
 )
 
@@ -22,11 +20,11 @@ An abstract mail component for Feather CMS.
 
 - Swift 6.1+
 - Platforms:
-    - macOS 15+
-    - iOS 18+
-    - tvOS 18+
-    - watchOS 11+
-    - visionOS 2+
+  - macOS 15+
+  - iOS 18+
+  - tvOS 18+
+  - watchOS 11+
+  - visionOS 2+
 
 ## Installation
 
@@ -44,11 +42,7 @@ Then add `FeatherMail` to your target dependencies:
 
 ## Usage
 
-[ 
-    ![DocC API documentation](https://img.shields.io/badge/DocC-API_documentation-F05138)
-](
-    https://feather-framework.github.io/feather-mail/
-)
+[![DocC API documentation](https://img.shields.io/badge/DocC-API_documentation-F05138)](https://feather-framework.github.io/feather-mail/)
 
 API documentation is available at the following link.
 
@@ -59,16 +53,16 @@ API documentation is available at the following link.
 
 The following mail driver implementations are available for use:
 
-- [SES Driver](https://github.com/feather-framework/feather-mail-driver-ses)
-- [SMTP Driver](https://github.com/feather-framework/feather-mail-driver-smtp)
-- [Memory Driver](https://github.com/feather-framework/feather-memory-mail)
+- [SES Client](https://github.com/feather-framework/feather-mail-driver-ses)
+- [SMTP Client](https://github.com/feather-framework/feather-mail-driver-smtp)
+- [Memory Client](https://github.com/feather-framework/feather-memory-mail)
 
 ## Development
 
 - Build: `swift build`
 - Test:
-    - local: `make test`
-    - using Docker: `make docker-test`
+  - local: `make test`
+  - using Docker: `make docker-test`
 - Format: `make format`
 - Check: `make check`
 
