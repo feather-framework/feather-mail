@@ -18,10 +18,16 @@
 ///
 /// This type performs **no validation**. Callers are expected to validate
 /// the `Mail` instance before encoding.
-public struct RawMailEncoder: Sendable {
+public struct RawMailEncoder: MailEncoder {
+
+    private let boundaryGenerator: BoundaryGenerator
 
     /// Creates a raw mail encoder.
-    public init() {}
+    public init(
+        boundaryGenerator: BoundaryGenerator = DefaultBoundaryGenerator()
+    ) {
+        self.boundaryGenerator = boundaryGenerator
+    }
 
     /// Encodes a mail into a raw MIME message string.
     ///
@@ -30,12 +36,15 @@ public struct RawMailEncoder: Sendable {
     ///     before calling this method.
     ///   - dateHeader: RFC 2822-formatted date header value.
     ///   - messageID: Message identifier value, including angle brackets.
+    ///   - boundary: Optional custom MIME boundary. If `nil`, the encoder
+    ///     generates one when attachments are present.
     /// - Returns: A raw MIME string suitable for transport providers.
     /// - Throws: `MailError.validation(.mailEncodeError)` when the message cannot be constructed.
     public func encode(
-        _ mail: Mail,
+        mail: Mail,
         dateHeader: String,
-        messageID: String
+        messageID: String,
+        boundary: String?
     ) throws(MailError) -> String {
 
         var out = String()
@@ -65,7 +74,10 @@ public struct RawMailEncoder: Sendable {
             out += "References: \(reference)\r\n"
         }
 
-        let boundary = mail.attachments.isEmpty ? nil : createBoundary()
+        let boundary =
+            mail.attachments.isEmpty
+            ? nil
+            : (boundary ?? boundaryGenerator.generate())
 
         if let boundary {
             out += "Content-type: multipart/mixed; boundary=\"\(boundary)\"\r\n"
@@ -103,6 +115,7 @@ public struct RawMailEncoder: Sendable {
                 out += attachment.data.base64EncodedString()
                 out += "\r\n"
             }
+            out += "--\(boundary)--\r\n"
         }
 
         out += "\r\n"
@@ -112,14 +125,6 @@ public struct RawMailEncoder: Sendable {
 }
 
 // MARK: - Helpers
-
-private extension RawMailEncoder {
-
-    /// Creates a unique MIME boundary without Foundation.
-    func createBoundary() -> String {
-        "Boundary-\(String(UInt64.random(in: UInt64.min...UInt64.max), radix: 16))"
-    }
-}
 
 //  Foundation-free Base64 encoding for byte arrays.
 private extension Array where Element == UInt8 {

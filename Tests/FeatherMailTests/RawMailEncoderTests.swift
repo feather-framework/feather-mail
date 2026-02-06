@@ -5,7 +5,6 @@
 //  Created by Binary Birds on 2026. 01. 26..
 //
 
-import Foundation
 import Testing
 @testable import FeatherMail
 
@@ -19,6 +18,7 @@ struct RawMailEncoderTests {
     private func makeMail(
         body: Body,
         cc: [Address] = [],
+        bcc: [Address] = [],
         replyTo: [Address] = [],
         reference: String? = nil,
         attachments: [FeatherMail.Attachment] = []
@@ -27,6 +27,7 @@ struct RawMailEncoderTests {
             from: .init("from@example.com"),
             to: [.init("to@example.com")],
             cc: cc,
+            bcc: bcc,
             replyTo: replyTo,
             subject: "Test Subject",
             body: body,
@@ -40,7 +41,7 @@ struct RawMailEncoderTests {
         let mail = makeMail(body: .plainText("Hello"))
 
         let raw = try encoder.encode(
-            mail,
+            mail: mail,
             dateHeader: dateHeader,
             messageID: messageID
         )
@@ -60,7 +61,7 @@ struct RawMailEncoderTests {
         let mail = makeMail(body: .html("<strong>Hi</strong>"))
 
         let raw = try encoder.encode(
-            mail,
+            mail: mail,
             dateHeader: dateHeader,
             messageID: messageID
         )
@@ -78,7 +79,7 @@ struct RawMailEncoderTests {
         )
 
         let raw = try encoder.encode(
-            mail,
+            mail: mail,
             dateHeader: dateHeader,
             messageID: messageID
         )
@@ -87,6 +88,23 @@ struct RawMailEncoderTests {
         #expect(raw.contains("Reply-to: reply@example.com\r\n"))
         #expect(raw.contains("In-Reply-To: <ref@example.com>\r\n"))
         #expect(raw.contains("References: <ref@example.com>\r\n"))
+    }
+
+    @Test
+    func bccIsNotWrittenToHeaders() throws {
+        let mail = makeMail(
+            body: .plainText("Hello"),
+            bcc: [.init("hidden@example.com")]
+        )
+
+        let raw = try encoder.encode(
+            mail: mail,
+            dateHeader: dateHeader,
+            messageID: messageID
+        )
+
+        #expect(!raw.contains("Bcc:"))
+        #expect(!raw.contains("hidden@example.com"))
     }
 
     @Test
@@ -102,7 +120,7 @@ struct RawMailEncoderTests {
         )
 
         let raw = try encoder.encode(
-            mail,
+            mail: mail,
             dateHeader: dateHeader,
             messageID: messageID
         )
@@ -129,7 +147,7 @@ struct RawMailEncoderTests {
         )
 
         let raw = try encoder.encode(
-            mail,
+            mail: mail,
             dateHeader: dateHeader,
             messageID: messageID
         )
@@ -144,17 +162,52 @@ struct RawMailEncoderTests {
         #expect(raw.contains("SGVsbG8="))
 
         let boundaryLinePrefix = "Content-type: multipart/mixed; boundary=\""
-        guard let boundaryLineStart = raw.range(of: boundaryLinePrefix) else {
+        guard
+            let boundaryLine = raw.split(separator: "\r\n")
+                .first(where: {
+                    $0.hasPrefix(boundaryLinePrefix)
+                })
+        else {
             Issue.record("Missing boundary header")
             return
         }
-        let afterPrefix = raw[boundaryLineStart.upperBound...]
-        guard let endQuote = afterPrefix.firstIndex(of: "\"") else {
+        let boundarySuffix = boundaryLine.dropFirst(boundaryLinePrefix.count)
+        guard boundarySuffix.last == "\"" else {
             Issue.record("Missing boundary terminator")
             return
         }
-        let boundary = String(afterPrefix[..<endQuote])
+        let boundary = String(boundarySuffix.dropLast())
         #expect(!boundary.isEmpty)
         #expect(raw.contains("--\(boundary)\r\n"))
+        #expect(raw.contains("--\(boundary)--\r\n"))
+    }
+
+    @Test
+    func customBoundaryIsUsedWhenProvided() throws {
+        let attachment = FeatherMail.Attachment(
+            name: "file.txt",
+            contentType: "text/plain",
+            data: Array("Hello".utf8)
+        )
+        let mail = makeMail(
+            body: .plainText("Body"),
+            attachments: [attachment]
+        )
+        let customBoundary = "Custom-12345"
+
+        let raw = try encoder.encode(
+            mail: mail,
+            dateHeader: dateHeader,
+            messageID: messageID,
+            boundary: customBoundary
+        )
+
+        #expect(
+            raw.contains(
+                "Content-type: multipart/mixed; boundary=\"\(customBoundary)\""
+            )
+        )
+        #expect(raw.contains("--\(customBoundary)\r\n"))
+        #expect(raw.contains("--\(customBoundary)--\r\n"))
     }
 }
