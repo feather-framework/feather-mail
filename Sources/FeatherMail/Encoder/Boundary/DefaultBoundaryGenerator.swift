@@ -5,6 +5,7 @@
 //  Created by Binary Birds on 2026. 02. 06..
 //
 
+/// Default MIME boundary generator implementation.
 public struct DefaultBoundaryGenerator: BoundaryGenerator {
 
     /// Creates a default MIME boundary generator.
