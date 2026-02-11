@@ -25,10 +25,12 @@ public struct DefaultMailHeaderProvider: MailHeaderProvider {
         self.dateHeaderValue = dateHeader
     }
 
+    /// Returns the caller-supplied RFC 2822-formatted date header value.
     public func dateHeader() -> String {
         dateHeaderValue
     }
 
+    /// Returns a Message-ID header value derived from the mail sender.
     public func messageID(for mail: Mail) -> String {
         let nonce = UInt64.random(in: UInt64.min...UInt64.max)
         return "<\(nonce)\(mail.from.email.drop { $0 != "@" })>"
