@@ -12,35 +12,59 @@
 /// The encoding logic preserves the legacy behavior and output format.
 ///
 /// The encoder:
-/// - builds standard email headers (From, To, Cc, Reply-To, Subject, Date)
+/// - builds standard email headers (From, To, Cc, Reply-To, Subject, Date, Message-ID)
 /// - supports plain text and HTML bodies
 /// - supports attachments using `multipart/mixed`
 ///
 /// This type performs **no validation**. Callers are expected to validate
 /// the `Mail` instance before encoding.
-public struct RawMailEncoder: Sendable {
+public struct RawMailEncoder: MailEncoder {
+
+    var boundaryEncodingStrategy: (@Sendable (Mail) -> String)
+    var messageIDEncodingStrategy: (@Sendable (Mail) -> String)
+    var headerDateEncodingStrategy: (@Sendable () -> String)
 
     /// Creates a raw mail encoder.
-    public init() {}
+    ///
+    /// - Parameters:
+    ///   - boundaryEncodingStrategy: Provides the MIME boundary string used
+    ///     when attachments are present.
+    ///   - messageIDEncodingStrategy: Provides the Message-ID header value,
+    ///     including angle brackets.
+    ///   - headerDateEncodingStrategy: Provides the RFC 2822-formatted Date header
+    ///     value, for example `Mon, 26 Jan 2026 12:34:56 +0000`.
+    public init(
+        boundaryEncodingStrategy: (@escaping @Sendable (Mail) -> String) = {
+            _ in
+            "Boundary-\(String(UInt64.random(in: UInt64.min...UInt64.max), radix: 16))"
+        },
+        messageIDEncodingStrategy: (@escaping @Sendable (Mail) -> String) = {
+            mail in
+            let nonce = UInt64.random(in: UInt64.min...UInt64.max)
+            return "<\(nonce)\(mail.from.email.drop { $0 != "@" })>"
+        },
+        headerDateEncodingStrategy: (@escaping @Sendable () -> String)
+    ) {
+        self.boundaryEncodingStrategy = boundaryEncodingStrategy
+        self.messageIDEncodingStrategy = messageIDEncodingStrategy
+        self.headerDateEncodingStrategy = headerDateEncodingStrategy
+    }
 
     /// Encodes a mail into a raw MIME message string.
     ///
-    /// - Parameters:
-    ///   - mail: The mail to encode. The mail must be validated
-    ///     before calling this method.
-    ///   - dateHeader: RFC 2822-formatted date header value.
-    ///   - messageID: Message identifier value, including angle brackets.
+    /// - Parameter mail: The mail to encode. The mail must be validated
+    ///   before calling this method.
     /// - Returns: A raw MIME string suitable for transport providers.
-    /// - Throws: `MailError.validation(.mailEncodeError)` when the message cannot be constructed.
+    /// - Throws: `MailError.validation(.emptyHeaderDateString)` when the configured Date header value is empty.
     public func encode(
-        _ mail: Mail,
-        dateHeader: String,
-        messageID: String
+        mail: Mail
     ) throws(MailError) -> String {
 
-        var out = String()
-        out.reserveCapacity(4096)
+        guard !headerDateEncodingStrategy().isEmpty else {
+            throw MailError.validation(.emptyHeaderDateString)
+        }
 
+        var out = String()
         out += "From: \(mail.from.mime)\r\n"
 
         if !mail.to.isEmpty {
@@ -57,15 +81,18 @@ public struct RawMailEncoder: Sendable {
         }
 
         out += "Subject: \(mail.subject)\r\n"
-        out += "Date: \(dateHeader)\r\n"
-        out += "Message-ID: \(messageID)\r\n"
+        out += "Date: \(headerDateEncodingStrategy())\r\n"
+        out += "Message-ID: \(messageIDEncodingStrategy(mail))\r\n"
 
         if let reference = mail.reference {
             out += "In-Reply-To: \(reference)\r\n"
             out += "References: \(reference)\r\n"
         }
 
-        let boundary = mail.attachments.isEmpty ? nil : createBoundary()
+        let boundary =
+            mail.attachments.isEmpty
+            ? nil
+            : (boundaryEncodingStrategy(mail))
 
         if let boundary {
             out += "Content-type: multipart/mixed; boundary=\"\(boundary)\"\r\n"
@@ -103,68 +130,12 @@ public struct RawMailEncoder: Sendable {
                 out += attachment.data.base64EncodedString()
                 out += "\r\n"
             }
+            out += "--\(boundary)--\r\n"
         }
 
         out += "\r\n"
 
         return out
     }
-}
 
-// MARK: - Helpers
-
-private extension RawMailEncoder {
-
-    /// Creates a unique MIME boundary without Foundation.
-    func createBoundary() -> String {
-        "Boundary-\(String(UInt64.random(in: UInt64.min...UInt64.max), radix: 16))"
-    }
-}
-
-//  Foundation-free Base64 encoding for byte arrays.
-private extension Array where Element == UInt8 {
-    /// Returns a Base64 string representation of the byte array.
-    func base64EncodedString() -> String {
-        guard !isEmpty else {
-            return ""
-        }
-
-        let alphabet = Array(
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-                .utf8
-        )
-        var output: [UInt8] = []
-        output.reserveCapacity(((count + 2) / 3) * 4)
-
-        var index = 0
-        while index < count {
-            let byte0 = self[index]
-            let byte1 = (index + 1 < count) ? self[index + 1] : 0
-            let byte2 = (index + 2 < count) ? self[index + 2] : 0
-
-            let triple =
-                (UInt32(byte0) << 16) | (UInt32(byte1) << 8) | UInt32(byte2)
-
-            output.append(alphabet[Int((triple >> 18) & 0x3F)])
-            output.append(alphabet[Int((triple >> 12) & 0x3F)])
-
-            if index + 1 < count {
-                output.append(alphabet[Int((triple >> 6) & 0x3F)])
-            }
-            else {
-                output.append(UInt8(ascii: "="))
-            }
-
-            if index + 2 < count {
-                output.append(alphabet[Int(triple & 0x3F)])
-            }
-            else {
-                output.append(UInt8(ascii: "="))
-            }
-
-            index += 3
-        }
-
-        return String(decoding: output, as: UTF8.self)
-    }
 }
