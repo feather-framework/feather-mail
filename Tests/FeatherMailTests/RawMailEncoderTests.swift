@@ -33,7 +33,9 @@ struct RawMailEncoderTests {
             messageIDEncodingStrategy: { _ in
                 messageID
             },
-            headerDateString: dateHeader
+            headerDateEncodingStrategy: {
+                dateHeader
+            }
         )
     }
 
@@ -281,7 +283,9 @@ struct RawMailEncoderTests {
             messageIDEncodingStrategy: { _ in
                 expectedMessageID()
             },
-            headerDateString: expectedDateHeader()
+            headerDateEncodingStrategy: {
+                expectedDateHeader()
+            }
         )
         let mail = makeMail(body: .plainText("Hello"))
 
@@ -301,7 +305,9 @@ struct RawMailEncoderTests {
             messageIDEncodingStrategy: { _ in
                 expectedMessageID()
             },
-            headerDateString: expectedDateHeader()
+            headerDateEncodingStrategy: {
+                expectedDateHeader()
+            }
         )
         let attachment = FeatherMail.Attachment(
             name: "file.txt",
@@ -334,7 +340,9 @@ struct RawMailEncoderTests {
             messageIDEncodingStrategy: { mail in
                 "<seen-\(mail.from.email)>"
             },
-            headerDateString: expectedDateHeader()
+            headerDateEncodingStrategy: {
+                expectedDateHeader()
+            }
         )
         let mail = makeMail(body: .plainText("Hello"))
 
@@ -399,7 +407,9 @@ struct RawMailEncoderTests {
             messageIDEncodingStrategy: { _ in
                 "<message-id@example.com>"
             },
-            headerDateString: ""
+            headerDateEncodingStrategy: {
+                ""
+            }
         )
         let mail = makeMail(body: .plainText("Hello"))
 

@@ -22,7 +22,7 @@ public struct RawMailEncoder: MailEncoder {
 
     var boundaryEncodingStrategy: (@Sendable (Mail) -> String)
     var messageIDEncodingStrategy: (@Sendable (Mail) -> String)
-    var headerDateString: String
+    var headerDateEncodingStrategy: (@Sendable () -> String)
 
     /// Creates a raw mail encoder.
     ///
@@ -31,7 +31,7 @@ public struct RawMailEncoder: MailEncoder {
     ///     when attachments are present.
     ///   - messageIDEncodingStrategy: Provides the Message-ID header value,
     ///     including angle brackets.
-    ///   - headerDateString: Provides the RFC 2822-formatted Date header
+    ///   - headerDateEncodingStrategy: Provides the RFC 2822-formatted Date header
     ///     value, for example `Mon, 26 Jan 2026 12:34:56 +0000`.
     public init(
         boundaryEncodingStrategy: (@escaping @Sendable (Mail) -> String) = {
@@ -43,11 +43,13 @@ public struct RawMailEncoder: MailEncoder {
             let nonce = UInt64.random(in: UInt64.min...UInt64.max)
             return "<\(nonce)\(mail.from.email.drop { $0 != "@" })>"
         },
-        headerDateString: String
+        headerDateEncodingStrategy: (@escaping @Sendable () -> String) = {
+            return ""
+        }
     ) {
         self.boundaryEncodingStrategy = boundaryEncodingStrategy
         self.messageIDEncodingStrategy = messageIDEncodingStrategy
-        self.headerDateString = headerDateString
+        self.headerDateEncodingStrategy = headerDateEncodingStrategy
     }
 
     /// Encodes a mail into a raw MIME message string.
@@ -60,13 +62,11 @@ public struct RawMailEncoder: MailEncoder {
         mail: Mail
     ) throws(MailError) -> String {
 
-        guard !headerDateString.isEmpty else {
+        guard !headerDateEncodingStrategy().isEmpty else {
             throw MailError.validation(.emptyHeaderDateString)
         }
 
         var out = String()
-        out.reserveCapacity(4096)
-
         out += "From: \(mail.from.mime)\r\n"
 
         if !mail.to.isEmpty {
@@ -83,7 +83,7 @@ public struct RawMailEncoder: MailEncoder {
         }
 
         out += "Subject: \(mail.subject)\r\n"
-        out += "Date: \(headerDateString)\r\n"
+        out += "Date: \(headerDateEncodingStrategy())\r\n"
         out += "Message-ID: \(messageIDEncodingStrategy(mail))\r\n"
 
         if let reference = mail.reference {
