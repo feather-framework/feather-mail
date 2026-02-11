@@ -10,18 +10,11 @@ public protocol MailEncoder: Sendable {
 
     /// Encodes a mail into a raw MIME message string.
     ///
-    /// - Parameters:
-    ///   - mail: The mail to encode. The mail must be validated
-    ///     before calling this method.
-    ///   - dateHeader: RFC 2822-formatted date header value.
-    ///   - messageID: Message identifier value, including angle brackets.
-    ///   - boundary: Optional custom MIME boundary. If `nil`, the encoder
-    ///     generates one when attachments are present. Provide a valid
-    ///     MIME boundary string without surrounding quotes.
+    /// - Parameter mail: The mail to encode. The mail must be validated
+    ///   before calling this method.
     /// - Returns: A raw MIME string suitable for transport providers.
     /// - Throws: `MailError.validation(.mailEncodeError)` when the message cannot be constructed.
     func encode(
         mail: Mail
     ) throws(MailError) -> String
 }
-

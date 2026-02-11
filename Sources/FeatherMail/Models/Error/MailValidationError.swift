@@ -35,6 +35,9 @@ public enum MailValidationError: Error, Equatable {
 
     // MARK: - Encoding errors
 
+    /// The required Date header value is empty.
+    case emptyHeaderDateString
+
     /// Failed to encode the mail into the required transport format.
     ///
     /// This can occur when generating raw MIME data for providers like SES.

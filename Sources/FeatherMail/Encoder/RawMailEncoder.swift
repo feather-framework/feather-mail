@@ -12,7 +12,7 @@
 /// The encoding logic preserves the legacy behavior and output format.
 ///
 /// The encoder:
-/// - builds standard email headers (From, To, Cc, Reply-To, Subject, Date)
+/// - builds standard email headers (From, To, Cc, Reply-To, Subject, Date, Message-ID)
 /// - supports plain text and HTML bodies
 /// - supports attachments using `multipart/mixed`
 ///
@@ -20,46 +20,49 @@
 /// the `Mail` instance before encoding.
 public struct RawMailEncoder: MailEncoder {
 
-//    private let boundaryGenerator: BoundaryGenerator
-    
     var boundaryEncodingStrategy: (@Sendable (Mail) -> String)
     var messageIDEncodingStrategy: (@Sendable (Mail) -> String)
-    var hederEncodingStrategy: (@Sendable (Mail) -> String)
+    var headerDateString: String
 
     /// Creates a raw mail encoder.
+    ///
+    /// - Parameters:
+    ///   - boundaryEncodingStrategy: Provides the MIME boundary string used
+    ///     when attachments are present.
+    ///   - messageIDEncodingStrategy: Provides the Message-ID header value,
+    ///     including angle brackets.
+    ///   - headerDateString: Provides the RFC 2822-formatted Date header
+    ///     value, for example `Mon, 26 Jan 2026 12:34:56 +0000`.
     public init(
-        boundaryEncodingStrategy: (@escaping @Sendable (Mail) -> String) = { _ in
+        boundaryEncodingStrategy: (@escaping @Sendable (Mail) -> String) = {
+            _ in
             "Boundary-\(String(UInt64.random(in: UInt64.min...UInt64.max), radix: 16))"
         },
-        messageIDEncodingStrategy: (@escaping @Sendable (Mail) -> String) = { mail in
-            return "<\(mail.from.email)>"
-        },
-        hederEncodingStrategy: (@escaping @Sendable (Mail) -> String) = { mail in
+        messageIDEncodingStrategy: (@escaping @Sendable (Mail) -> String) = {
+            mail in
             let nonce = UInt64.random(in: UInt64.min...UInt64.max)
             return "<\(nonce)\(mail.from.email.drop { $0 != "@" })>"
         },
-//        boundaryGenerator: BoundaryGenerator = DefaultBoundaryGenerator()
+        headerDateString: String
     ) {
-//        self.boundaryGenerator = boundaryGenerator
         self.boundaryEncodingStrategy = boundaryEncodingStrategy
         self.messageIDEncodingStrategy = messageIDEncodingStrategy
-        self.hederEncodingStrategy = hederEncodingStrategy
+        self.headerDateString = headerDateString
     }
 
     /// Encodes a mail into a raw MIME message string.
     ///
-    /// - Parameters:
-    ///   - mail: The mail to encode. The mail must be validated
-    ///     before calling this method.
-    ///   - dateHeader: RFC 2822-formatted date header value.
-    ///   - messageID: Message identifier value, including angle brackets.
-    ///   - boundary: Optional custom MIME boundary. If `nil`, the encoder
-    ///     generates one when attachments are present.
+    /// - Parameter mail: The mail to encode. The mail must be validated
+    ///   before calling this method.
     /// - Returns: A raw MIME string suitable for transport providers.
-    /// - Throws: `MailError.validation(.mailEncodeError)` when the message cannot be constructed.
+    /// - Throws: `MailError.validation(.emptyHeaderDateString)` when the configured Date header value is empty.
     public func encode(
         mail: Mail
     ) throws(MailError) -> String {
+
+        guard !headerDateString.isEmpty else {
+            throw MailError.validation(.emptyHeaderDateString)
+        }
 
         var out = String()
         out.reserveCapacity(4096)
@@ -80,7 +83,7 @@ public struct RawMailEncoder: MailEncoder {
         }
 
         out += "Subject: \(mail.subject)\r\n"
-        out += "Date: \(hederEncodingStrategy(mail))\r\n"
+        out += "Date: \(headerDateString)\r\n"
         out += "Message-ID: \(messageIDEncodingStrategy(mail))\r\n"
 
         if let reference = mail.reference {
@@ -137,5 +140,3 @@ public struct RawMailEncoder: MailEncoder {
         return out
     }
 }
-
-// MARK: - Helpers
