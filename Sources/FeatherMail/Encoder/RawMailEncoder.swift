@@ -43,9 +43,7 @@ public struct RawMailEncoder: MailEncoder {
             let nonce = UInt64.random(in: UInt64.min...UInt64.max)
             return "<\(nonce)\(mail.from.email.drop { $0 != "@" })>"
         },
-        headerDateEncodingStrategy: (@escaping @Sendable () -> String) = {
-            return ""
-        }
+        headerDateEncodingStrategy: (@escaping @Sendable () -> String)
     ) {
         self.boundaryEncodingStrategy = boundaryEncodingStrategy
         self.messageIDEncodingStrategy = messageIDEncodingStrategy
@@ -139,4 +137,5 @@ public struct RawMailEncoder: MailEncoder {
 
         return out
     }
+
 }
