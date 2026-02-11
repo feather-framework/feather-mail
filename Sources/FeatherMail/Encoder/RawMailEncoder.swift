@@ -20,13 +20,30 @@
 /// the `Mail` instance before encoding.
 public struct RawMailEncoder: MailEncoder {
 
-    private let boundaryGenerator: BoundaryGenerator
+//    private let boundaryGenerator: BoundaryGenerator
+    
+    var boundaryEncodingStrategy: (@Sendable (Mail) -> String)
+    var messageIDEncodingStrategy: (@Sendable (Mail) -> String)
+    var hederEncodingStrategy: (@Sendable (Mail) -> String)
 
     /// Creates a raw mail encoder.
     public init(
-        boundaryGenerator: BoundaryGenerator = DefaultBoundaryGenerator()
+        boundaryEncodingStrategy: (@escaping @Sendable (Mail) -> String) = { _ in
+            "Boundary-\(String(UInt64.random(in: UInt64.min...UInt64.max), radix: 16))"
+        },
+        messageIDEncodingStrategy: (@escaping @Sendable (Mail) -> String) = { mail in
+            return "<\(mail.from.email)>"
+        },
+        hederEncodingStrategy: (@escaping @Sendable (Mail) -> String) = { mail in
+            let nonce = UInt64.random(in: UInt64.min...UInt64.max)
+            return "<\(nonce)\(mail.from.email.drop { $0 != "@" })>"
+        },
+//        boundaryGenerator: BoundaryGenerator = DefaultBoundaryGenerator()
     ) {
-        self.boundaryGenerator = boundaryGenerator
+//        self.boundaryGenerator = boundaryGenerator
+        self.boundaryEncodingStrategy = boundaryEncodingStrategy
+        self.messageIDEncodingStrategy = messageIDEncodingStrategy
+        self.hederEncodingStrategy = hederEncodingStrategy
     }
 
     /// Encodes a mail into a raw MIME message string.
@@ -41,10 +58,7 @@ public struct RawMailEncoder: MailEncoder {
     /// - Returns: A raw MIME string suitable for transport providers.
     /// - Throws: `MailError.validation(.mailEncodeError)` when the message cannot be constructed.
     public func encode(
-        mail: Mail,
-        dateHeader: String,
-        messageID: String,
-        boundary: String?
+        mail: Mail
     ) throws(MailError) -> String {
 
         var out = String()
@@ -66,8 +80,8 @@ public struct RawMailEncoder: MailEncoder {
         }
 
         out += "Subject: \(mail.subject)\r\n"
-        out += "Date: \(dateHeader)\r\n"
-        out += "Message-ID: \(messageID)\r\n"
+        out += "Date: \(hederEncodingStrategy(mail))\r\n"
+        out += "Message-ID: \(messageIDEncodingStrategy(mail))\r\n"
 
         if let reference = mail.reference {
             out += "In-Reply-To: \(reference)\r\n"
@@ -77,7 +91,7 @@ public struct RawMailEncoder: MailEncoder {
         let boundary =
             mail.attachments.isEmpty
             ? nil
-            : (boundary ?? boundaryGenerator.generate())
+            : (boundaryEncodingStrategy(mail))
 
         if let boundary {
             out += "Content-type: multipart/mixed; boundary=\"\(boundary)\"\r\n"

@@ -42,8 +42,6 @@ struct RawMailEncoderTests {
 
         let raw = try encoder.encode(
             mail: mail,
-            dateHeader: dateHeader,
-            messageID: messageID
         )
 
         #expect(raw.contains("From: from@example.com\r\n"))
@@ -62,8 +60,6 @@ struct RawMailEncoderTests {
 
         let raw = try encoder.encode(
             mail: mail,
-            dateHeader: dateHeader,
-            messageID: messageID
         )
 
         #expect(raw.contains("Content-Type: text/html; charset=\"UTF-8\"\r\n"))
@@ -80,8 +76,6 @@ struct RawMailEncoderTests {
 
         let raw = try encoder.encode(
             mail: mail,
-            dateHeader: dateHeader,
-            messageID: messageID
         )
 
         #expect(raw.contains("Cc: cc@example.com\r\n"))
@@ -99,8 +93,6 @@ struct RawMailEncoderTests {
 
         let raw = try encoder.encode(
             mail: mail,
-            dateHeader: dateHeader,
-            messageID: messageID
         )
 
         #expect(!raw.contains("Bcc:"))
@@ -121,8 +113,6 @@ struct RawMailEncoderTests {
 
         let raw = try encoder.encode(
             mail: mail,
-            dateHeader: dateHeader,
-            messageID: messageID
         )
 
         #expect(raw.contains("Content-type: multipart/mixed; boundary=\""))
@@ -148,8 +138,6 @@ struct RawMailEncoderTests {
 
         let raw = try encoder.encode(
             mail: mail,
-            dateHeader: dateHeader,
-            messageID: messageID
         )
 
         #expect(raw.contains("Content-type: multipart/mixed; boundary=\""))
@@ -197,9 +185,6 @@ struct RawMailEncoderTests {
 
         let raw = try encoder.encode(
             mail: mail,
-            dateHeader: dateHeader,
-            messageID: messageID,
-            boundary: customBoundary
         )
 
         #expect(
