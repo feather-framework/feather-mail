@@ -2,13 +2,15 @@
 
 An abstract mail component for Feather CMS.
 
-[![Release: 1.0.0-beta.2](https://img.shields.io/badge/Release-1%2E0%2E0--beta%2E2-F05138)](
-    https://github.com/feather-framework/feather-mail/releases/tag/1.0.0-beta.2
+[
+    ![Release: 1.0.0-beta.3](https://img.shields.io/badge/Release-1%2E0%2E0--beta%2E3-F05138)
+](
+    https://github.com/feather-framework/feather-mail/releases/tag/1.0.0-beta.3
 )
 
 ## Features
 
-- Immutable mail payload model
+- Mail currency type to send messages
 - Validation helpers and errors
 - Raw MIME encoder for transport providers
 - Attachments and HTML support
@@ -32,7 +34,7 @@ An abstract mail component for Feather CMS.
 Use Swift Package Manager; add the dependency to your `Package.swift` file:
 
 ```swift
-.package(url: "https://github.com/feather-framework/feather-mail", exact: "1.0.0-beta.2"),
+.package(url: "https://github.com/feather-framework/feather-mail", exact: "1.0.0-beta.3"),
 ```
 
 Then add `FeatherMail` to your target dependencies:
@@ -43,20 +45,24 @@ Then add `FeatherMail` to your target dependencies:
 
 ## Usage
 
-[![DocC API documentation](https://img.shields.io/badge/DocC-API_documentation-F05138)](https://feather-framework.github.io/feather-mail/)
+[
+    ![DocC API documentation](https://img.shields.io/badge/DocC-API_documentation-F05138)
+](
+    https://feather-framework.github.io/feather-mail/
+)
 
 API documentation is available at the following link.
 
 > [!WARNING]
 > This repository is a work in progress, things can break until it reaches v1.0.0.
 
-## Mail drivers
+## Mail implementations
 
-The following mail driver implementations are available for use:
+The following mail client implementations are available for use:
 
-- [SES Client](https://github.com/feather-framework/feather-mail-driver-ses)
-- [SMTP Client](https://github.com/feather-framework/feather-mail-driver-smtp)
-- [Memory Client](https://github.com/feather-framework/feather-memory-mail)
+- [Feather Mail SES](https://github.com/feather-framework/feather-mail-ses)
+- [Feather Mail SMTP](https://github.com/feather-framework/feather-mail-smtp)
+- [Feather Mail Ephemeral](https://github.com/feather-framework/feather-mail-ephemeral)
 
 ## Development
 

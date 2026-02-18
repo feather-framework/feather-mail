@@ -10,7 +10,7 @@ import FeatherMail
 /// Test mail client used for validation scenarios.
 ///
 /// This client performs validation only and never delivers mail.
-public struct MockMailClient: MailClient, Sendable {
+public struct MockMailClient: MailClient {
 
     /// Validation strategy used by the mock.
     private let validator: MailValidator

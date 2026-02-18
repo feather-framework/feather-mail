@@ -9,13 +9,13 @@
 public struct Attachment: Sendable {
 
     /// File name including extension (e.g. "invoice.pdf").
-    public let name: String
+    public var name: String
 
     /// MIME type of the attachment content (e.g. "application/pdf").
-    public let contentType: String
+    public var contentType: String
 
     /// Raw attachment bytes.
-    public let data: [UInt8]
+    public var data: [UInt8]
 
     /// Creates an attachment.
     ///

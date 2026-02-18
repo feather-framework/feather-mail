@@ -9,10 +9,10 @@
 public struct Address: Sendable {
 
     /// Raw email address string (e.g. "user@example.com").
-    public let email: String
+    public var email: String
 
     /// Optional display name (e.g. "John Doe").
-    public let name: String?
+    public var name: String?
 
     /// Creates an email address.
     /// - Parameters:
