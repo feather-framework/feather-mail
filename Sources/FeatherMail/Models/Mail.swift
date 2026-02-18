@@ -9,31 +9,31 @@
 public struct Mail: Sendable {
 
     /// Sender address.
-    public let from: Address
+    public var from: Address
 
     /// Primary recipients.
-    public let to: [Address]
+    public var to: [Address]
 
     /// Carbon copy recipients.
-    public let cc: [Address]
+    public var cc: [Address]
 
     /// Blind carbon copy recipients.
-    public let bcc: [Address]
+    public var bcc: [Address]
 
     /// Reply-to addresses.
-    public let replyTo: [Address]
+    public var replyTo: [Address]
 
     /// Subject line.
-    public let subject: String
+    public var subject: String
 
     /// Message body content.
-    public let body: Body
+    public var body: Body
 
     /// Optional reference identifier for threading.
-    public let reference: String?
+    public var reference: String?
 
     /// File attachments.
-    public let attachments: [Attachment]
+    public var attachments: [Attachment]
 
     /// Creates a mail message.
     ///

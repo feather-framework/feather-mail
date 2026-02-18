@@ -15,11 +15,11 @@
 /// - at least one valid recipient must exist
 /// - basic header injection prevention
 /// - optional total attachment size limit
-public struct BasicMailValidator: MailValidator, Sendable {
+public struct BasicMailValidator: MailValidator {
 
     /// Maximum allowed total attachment size in bytes.
     /// If `nil`, attachment size validation is skipped.
-    private let maxTotalAttachmentSize: Int?
+    private var maxTotalAttachmentSize: Int?
 
     /// Creates a mail validator.
     ///

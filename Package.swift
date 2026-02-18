@@ -3,7 +3,6 @@ import PackageDescription
 
 // NOTE: https://github.com/swift-server/swift-http-server/blob/main/Package.swift
 var defaultSwiftSettings: [SwiftSetting] = [
-    
     // https://github.com/swiftlang/swift-evolution/blob/main/proposals/0441-formalize-language-mode-terminology.md
     .swiftLanguageMode(.v6),
     // https://github.com/swiftlang/swift-evolution/blob/main/proposals/0444-member-import-visibility.md
@@ -23,13 +22,19 @@ defaultSwiftSettings.append(
 
 let package = Package(
     name: "feather-mail",
+    platforms: [
+        .macOS(.v15),
+        .iOS(.v18),
+        .tvOS(.v18),
+        .watchOS(.v11),
+        .visionOS(.v2),
+    ],
     products: [
         .library(name: "FeatherMail", targets: ["FeatherMail"]),
     ],
     dependencies: [
         // [docc-plugin-placeholder]
     ],
-    
     targets: [
         .target(
             name: "FeatherMail",
