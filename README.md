@@ -2,11 +2,7 @@
 
 An abstract mail component for Feather CMS.
 
-[
-    ![Release: 1.0.0-beta.3](https://img.shields.io/badge/Release-1%2E0%2E0--beta%2E3-F05138)
-](
-    https://github.com/feather-framework/feather-mail/releases/tag/1.0.0-beta.3
-)
+[![Release: 1.0.0-rc.1](https://img.shields.io/badge/Release-1%2E0%2E0--rc%2E1-F05138)](https://github.com/feather-framework/feather-mail/releases/tag/1.0.0-rc.1)
 
 ## Features
 
@@ -34,7 +30,7 @@ An abstract mail component for Feather CMS.
 Use Swift Package Manager; add the dependency to your `Package.swift` file:
 
 ```swift
-.package(url: "https://github.com/feather-framework/feather-mail", exact: "1.0.0-beta.3"),
+.package(url: "https://github.com/feather-framework/feather-mail", exact: "1.0.0-rc.1"),
 ```
 
 Then add `FeatherMail` to your target dependencies:
@@ -45,11 +41,7 @@ Then add `FeatherMail` to your target dependencies:
 
 ## Usage
 
-[
-    ![DocC API documentation](https://img.shields.io/badge/DocC-API_documentation-F05138)
-](
-    https://feather-framework.github.io/feather-mail/
-)
+[![DocC API documentation](https://img.shields.io/badge/DocC-API_documentation-F05138)](https://feather-framework.github.io/feather-mail/)
 
 API documentation is available at the following link.
 
