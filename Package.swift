@@ -1,24 +1,21 @@
-// swift-tools-version:6.1
+// swift-tools-version:6.3
 import PackageDescription
 
-// NOTE: https://github.com/swift-server/swift-http-server/blob/main/Package.swift
-var defaultSwiftSettings: [SwiftSetting] = [
-    // https://github.com/swiftlang/swift-evolution/blob/main/proposals/0441-formalize-language-mode-terminology.md
+let swiftSettings: [SwiftSetting] = [
     .swiftLanguageMode(.v6),
-    // https://github.com/swiftlang/swift-evolution/blob/main/proposals/0444-member-import-visibility.md
+    .strictMemorySafety(),
+    .treatAllWarnings(as: .error),
+    .enableUpcomingFeature("InternalImportsByDefault"),
+    .enableUpcomingFeature("ExistentialAny"),
     .enableUpcomingFeature("MemberImportVisibility"),
-    // https://forums.swift.org/t/experimental-support-for-lifetime-dependencies-in-swift-6-2-and-beyond/78638
+    .enableUpcomingFeature("InferIsolatedConformances"),
+    .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+    .enableUpcomingFeature("ImmutableWeakCaptures"),
+    .enableExperimentalFeature("SuppressedAssociatedTypes"),
+    .enableExperimentalFeature("LifetimeDependence"),
     .enableExperimentalFeature("Lifetimes"),
-    // https://github.com/swiftlang/swift/pull/65218
-    .enableExperimentalFeature("AvailabilityMacro=featherMail:macOS 15, iOS 18, watchOS 9, tvOS 11, visionOS 2"),
+    .enableUpcomingFeature("StrictConcurrency"),
 ]
-
-#if compiler(>=6.2)
-defaultSwiftSettings.append(
-    // https://github.com/swiftlang/swift-evolution/blob/main/proposals/0461-async-function-isolation.md
-    .enableUpcomingFeature("NonisolatedNonsendingByDefault")
-)
-#endif
 
 let package = Package(
     name: "feather-mail",
@@ -31,15 +28,24 @@ let package = Package(
     ],
     products: [
         .library(name: "FeatherMail", targets: ["FeatherMail"]),
+        .library(name: "FeatherMailTesting", targets: ["FeatherMailTesting"]),
     ],
     dependencies: [
-        // [docc-plugin-placeholder]
+        
     ],
     targets: [
         .target(
             name: "FeatherMail",
             dependencies: [],
-            swiftSettings: defaultSwiftSettings
+            swiftSettings: swiftSettings
+        ),
+        .target(
+            name: "FeatherMailTesting",
+            dependencies: [
+                .target(name: "FeatherMail"),
+            ],
+            path: "Sources/FeatherMailTesting",
+            swiftSettings: swiftSettings
         ),
         .testTarget(
             name: "FeatherMailTests",
@@ -49,7 +55,15 @@ let package = Package(
             resources: [
                 .copy("Assets/feather.png")
             ],
-            swiftSettings: defaultSwiftSettings
+            swiftSettings: swiftSettings
+        ),
+        .testTarget(
+            name: "FeatherMailTestingTests",
+            dependencies: [
+                .target(name: "FeatherMail"),
+                .target(name: "FeatherMailTesting"),
+            ],
+            swiftSettings: swiftSettings
         ),
     ],
     
