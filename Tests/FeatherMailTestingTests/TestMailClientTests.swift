@@ -15,8 +15,12 @@ struct TestMailClientTests {
         try await client.send(first)
         try await client.send(second)
 
-        #expect(await client.getMailbox().map(\.subject) == ["First", "Second"])
-        #expect(await mailbox.getMessages().map(\.subject) == ["First", "Second"])
+        #expect(
+            await client.getMailbox().map(\.subject) == ["First", "Second"]
+        )
+        #expect(
+            await mailbox.getMessages().map(\.subject) == ["First", "Second"]
+        )
 
         await client.clearMailbox()
 
@@ -41,7 +45,9 @@ struct TestMailClientTests {
 
         do {
             try await client.send(makeMail(subject: "Rejected"))
-            Issue.record("Expected the mailbox validator to reject the message.")
+            Issue.record(
+                "Expected the mailbox validator to reject the message."
+            )
         }
         catch MailError.validation(.invalidSubject) {
             // Expected validation failure.
