@@ -116,6 +116,27 @@ struct FeatherMailTestSuite {
         }
     }
 
+    @Test
+    func customHeaderInjectionThrows() throws {
+        let validator = BasicMailValidator()
+        let mail = Mail(
+            from: .init("from@example.com"),
+            to: [.init("to@example.com")],
+            subject: "Hello",
+            body: .plainText("Body"),
+            customHeaders: [
+                .init(
+                    name: "List-Unsubscribe",
+                    value: "<https://example.com>\r\nBcc: victim@example.com"
+                )
+            ]
+        )
+
+        #expect(throws: MailValidationError.headerInjectionDetected) {
+            try validator.validate(mail)
+        }
+    }
+
     // MARK: - Address MIME
 
     @Test

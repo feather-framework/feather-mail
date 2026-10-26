@@ -80,6 +80,10 @@ public struct RawMailEncoder: MailEncoder {
                 "Reply-to: \(mail.replyTo.map(\.mime).joined(separator: ", "))\r\n"
         }
 
+        for header in mail.customHeaders {
+            out += "\(header.name): \(header.value)\r\n"
+        }
+
         out += "Subject: \(mail.subject)\r\n"
         out += "Date: \(headerDateEncodingStrategy())\r\n"
         out += "Message-ID: \(messageIDEncodingStrategy(mail))\r\n"

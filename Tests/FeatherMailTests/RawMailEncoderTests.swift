@@ -129,6 +129,40 @@ struct RawMailEncoderTests {
     }
 
     @Test
+    func customHeadersAreEncoded() throws {
+        let raw = try makeEncoder()
+            .encode(
+                mail: Mail(
+                    from: .init("from@example.com"),
+                    to: [.init("to@example.com")],
+                    subject: "Hello",
+                    body: .plainText("Body"),
+                    customHeaders: [
+                        .init(
+                            name: "List-Unsubscribe",
+                            value: "<https://example.com/unsubscribe/token>"
+                        ),
+                        .init(
+                            name: "List-Unsubscribe-Post",
+                            value: "List-Unsubscribe=One-Click"
+                        ),
+                    ]
+                )
+            )
+
+        #expect(
+            raw.contains(
+                "List-Unsubscribe: <https://example.com/unsubscribe/token>\r\n"
+            )
+        )
+        #expect(
+            raw.contains(
+                "List-Unsubscribe-Post: List-Unsubscribe=One-Click\r\n"
+            )
+        )
+    }
+
+    @Test
     func htmlWithAttachmentUsesMultipartAndHtmlBody() throws {
         let attachment = FeatherMail.Attachment(
             name: "image.png",
