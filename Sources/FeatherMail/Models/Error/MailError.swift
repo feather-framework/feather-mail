@@ -15,6 +15,6 @@ public enum MailError: Error {
     case custom(String)
 
     /// An uncategorized underlying error.
-    case unknown(Error)
+    case unknown(any Error)
 
 }

@@ -20,8 +20,8 @@ struct FeatherMailTestSuite {
     // MARK: - Invalid Sender
 
     @Test
-    func invalidSenderThrows() async {
-        let client = MockMailClient()
+    func invalidSenderThrows() throws {
+        let validator = BasicMailValidator()
 
         let mail = Mail(
             from: .init("   "),
@@ -30,16 +30,16 @@ struct FeatherMailTestSuite {
             body: .plainText("Body")
         )
 
-        await #expect(throws: MailValidationError.invalidSender) {
-            try await client.validate(mail)
+        #expect(throws: MailValidationError.invalidSender) {
+            try validator.validate(mail)
         }
     }
 
     // MARK: - Invalid Subject
 
     @Test
-    func invalidSubjectThrows() async {
-        let client = MockMailClient()
+    func invalidSubjectThrows() throws {
+        let validator = BasicMailValidator()
 
         let mail = Mail(
             from: .init("from@example.com"),
@@ -48,16 +48,16 @@ struct FeatherMailTestSuite {
             body: .plainText("Body")
         )
 
-        await #expect(throws: MailValidationError.invalidSubject) {
-            try await client.validate(mail)
+        #expect(throws: MailValidationError.invalidSubject) {
+            try validator.validate(mail)
         }
     }
 
     // MARK: - Invalid Recipient
 
     @Test
-    func invalidRecipientThrows() async {
-        let client = MockMailClient()
+    func invalidRecipientThrows() throws {
+        let validator = BasicMailValidator()
 
         let mail = Mail(
             from: .init("from@example.com"),
@@ -66,19 +66,16 @@ struct FeatherMailTestSuite {
             body: .plainText("Body")
         )
 
-        await #expect(throws: MailValidationError.invalidRecipient) {
-            try await client.validate(mail)
+        #expect(throws: MailValidationError.invalidRecipient) {
+            try validator.validate(mail)
         }
     }
 
     // MARK: - Attachments Too Large
 
     @Test
-    func attachmentsTooLargeThrows() async {
-        let validator = BasicMailValidator(
-            maxTotalAttachmentSize: 100
-        )
-        let client = MockMailClient(validator: validator)
+    func attachmentsTooLargeThrows() throws {
+        let validator = BasicMailValidator(maxTotalAttachmentSize: 100)
 
         let data = [UInt8](repeating: 0, count: 1_024)
 
@@ -96,16 +93,16 @@ struct FeatherMailTestSuite {
             ]
         )
 
-        await #expect(throws: MailValidationError.attachmentsTooLarge) {
-            try await client.validate(mail)
+        #expect(throws: MailValidationError.attachmentsTooLarge) {
+            try validator.validate(mail)
         }
     }
 
     // MARK: - Header Injection
 
     @Test
-    func headerInjectionThrows() async {
-        let client = MockMailClient()
+    func headerInjectionThrows() throws {
+        let validator = BasicMailValidator()
 
         let mail = Mail(
             from: .init("from@example.com"),
@@ -114,8 +111,8 @@ struct FeatherMailTestSuite {
             body: .plainText("Body")
         )
 
-        await #expect(throws: MailValidationError.headerInjectionDetected) {
-            try await client.validate(mail)
+        #expect(throws: MailValidationError.headerInjectionDetected) {
+            try validator.validate(mail)
         }
     }
 
@@ -133,8 +130,8 @@ struct FeatherMailTestSuite {
     // MARK: - Valid Mail
 
     @Test
-    func validMailSucceeds() async throws {
-        let client = MockMailClient()
+    func validMailSucceeds() throws {
+        let validator = BasicMailValidator()
 
         let mail = Mail(
             from: .init("from@example.com"),
@@ -143,6 +140,6 @@ struct FeatherMailTestSuite {
             body: .plainText("Body")
         )
 
-        try await client.validate(mail)
+        try validator.validate(mail)
     }
 }
