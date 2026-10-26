@@ -96,6 +96,23 @@ private extension BasicMailValidator {
         else {
             throw MailValidationError.headerInjectionDetected
         }
+
+        let validCustomHeaders = mail.customHeaders.allSatisfy { header in
+            let tokenPunctuation = "!#$%&'*+-.^_`|~"
+            return !header.name.isEmpty
+                && header.name.unicodeScalars.allSatisfy { scalar in
+                    (65...90).contains(scalar.value)
+                        || (97...122).contains(scalar.value)
+                        || (48...57).contains(scalar.value)
+                        || tokenPunctuation.unicodeScalars.contains(scalar)
+                }
+                && !header.value.unicodeScalars.contains(where: {
+                    $0.value == 10 || $0.value == 13
+                })
+        }
+        guard validCustomHeaders else {
+            throw MailValidationError.headerInjectionDetected
+        }
     }
 
     func hasNonWhitespace(_ value: String) -> Bool {

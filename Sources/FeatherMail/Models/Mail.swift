@@ -35,6 +35,9 @@ public struct Mail: Sendable {
     /// File attachments.
     public var attachments: [Attachment]
 
+    /// Custom message headers.
+    public var customHeaders: [MailHeader]
+
     /// Creates a mail message.
     ///
     /// - Parameters:
@@ -47,6 +50,7 @@ public struct Mail: Sendable {
     ///   - body: Message body content.
     ///   - reference: Optional threading reference string.
     ///   - attachments: File attachments. Defaults to empty.
+    ///   - customHeaders: Additional message headers. Defaults to empty.
     public init(
         from: Address,
         to: [Address],
@@ -56,7 +60,8 @@ public struct Mail: Sendable {
         subject: String,
         body: Body,
         reference: String? = nil,
-        attachments: [Attachment] = []
+        attachments: [Attachment] = [],
+        customHeaders: [MailHeader] = []
     ) {
         self.from = from
         self.to = to
@@ -67,6 +72,7 @@ public struct Mail: Sendable {
         self.body = body
         self.reference = reference
         self.attachments = attachments
+        self.customHeaders = customHeaders
     }
 
 }
