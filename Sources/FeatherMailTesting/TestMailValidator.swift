@@ -10,6 +10,7 @@ public struct TestMailValidator: MailValidator {
         self.error = error
     }
 
+    /// Validates a message, throwing the configured error when present.
     public func validate(_ mail: Mail) async throws(MailValidationError) {
         if let error {
             throw error
